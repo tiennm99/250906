@@ -1577,43 +1577,6 @@ body:hover .scrollbar-decoration {
     fill: white;
 }
 
-/* Special fills for complex SVGs */
-.svg-brown {
-    fill: #8E6E53;
-}
-
-.svg-fries {
-    fill: #F4D03F;
-}
-
-.svg-fries-dark {
-    fill: #F39C12;
-}
-
-.svg-burger {
-    fill: #E57E25;
-}
-
-.svg-dark-overlay {
-    fill: rgba(0, 0, 0, 0.2);
-}
-
-.svg-red {
-    fill: #E74C3C;
-}
-
-.svg-red-top {
-    fill: #C0392B;
-}
-
-.svg-orange {
-    fill: #F39C12;
-}
-
-.svg-burger-seeds {
-    fill: #F5D76E;
-}
-
 .food-btn.selected .svg-icon svg .svg-brown,
 .food-btn.selected .svg-icon svg .svg-fries,
 .food-btn.selected .svg-icon svg .svg-fries-dark,
@@ -1625,98 +1588,11 @@ body:hover .scrollbar-decoration {
     fill: white;
 }
 
+/*
 .food-btn.selected .svg-icon svg .svg-dark-overlay {
     fill: rgba(255, 255, 255, 0.3);
 }
-
-/* Custom food input styling */
-.custom-food-container {
-    margin: 20px 0;
-    padding: 15px;
-    border-radius: 15px;
-    background: rgba(255, 107, 149, 0.05);
-    transition: all 0.5s ease;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-}
-
-.custom-food-container.show {
-    max-height: 350px; /* Increased to fit more content */
-    opacity: 1;
-}
-
-.custom-food-input {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.custom-food-input label {
-    font-size: 14px;
-    color: #ff6b95;
-    font-weight: 600;
-}
-
-.dark-mode .custom-food-input label {
-    color: #ff8bb3;
-}
-
-.custom-food-input input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid rgba(255, 182, 193, 0.5);
-    border-radius: 12px;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
-    background: white;
-    color: #333;
-    transition: all 0.3s ease;
-}
-
-.dark-mode .custom-food-input input {
-    background: #1e1e1e;
-    border-color: rgba(255, 107, 149, 0.3);
-    color: #e6e6e6;
-}
-
-.custom-food-input input:focus {
-    border-color: rgba(255, 107, 149, 0.8);
-    outline: none;
-    box-shadow: 0 4px 10px rgba(255, 107, 149, 0.2);
-}
-
-.custom-food-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 12px 8px 15px;
-    background: linear-gradient(45deg, #ff6b95, #ff8bb3);
-    color: white;
-    border-radius: 20px;
-    margin: 10px 5px 0 0;
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(255, 107, 149, 0.25);
-    animation: badge-pop 0.3s ease-out;
-}
-
-.custom-food-badge span {
-    margin-left: 8px;
-    width: 18px;
-    height: 18px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.custom-food-badge span:hover {
-    background: rgba(255, 255, 255, 0.4);
-}
+*/
 
 /* Enhanced food selection buttons with better visual feedback */
 .food-btn {
@@ -1796,32 +1672,6 @@ body:hover .scrollbar-decoration {
     0% { box-shadow: 0 0 0 0 rgba(255, 139, 179, 0.7); }
     70% { box-shadow: 0 0 0 10px rgba(255, 139, 179, 0); }
     100% { box-shadow: 0 0 0 0 rgba(255, 139, 179, 0); }
-}
-
-/* Custom scrollbar for the custom food list */
-.custom-food-list::-webkit-scrollbar {
-    width: 6px;
-}
-
-.custom-food-list::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.custom-food-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 107, 149, 0.5);
-    border-radius: 10px;
-}
-
-.custom-food-list::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 107, 149, 0.7);
-}
-
-.dark-mode .custom-food-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 139, 179, 0.5);
-}
-
-.dark-mode .custom-food-list::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 139, 179, 0.7);
 }
 
 /* Food selection status indicator */
