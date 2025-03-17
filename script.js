@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const locationButtons = document.querySelectorAll('.location-btn');
     const selectedLocationMessage = document.getElementById('selected-location-message');
     const locationCelebration = document.getElementById('location-celebration');
-    const locationBackBtn = document.getElementById('location-back-btn');
     const confirmLocationBtn = document.getElementById('confirm-location-btn');
     
     // Date & time selection elements
@@ -32,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const datetimeRowTemplate = document.getElementById('datetime-row-template');
     const datetimeContainer = document.querySelector('.datetime-container');
     const selectedDatetimeMessage = document.getElementById('selected-datetime-message');
-    const datetimeBackBtn = document.getElementById('datetime-back-btn');
 
     // Food selection elements
     const foodNextBtn = document.getElementById('food-next-btn');
@@ -40,9 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const foodButtons = document.querySelectorAll('.food-btn');
     const selectedFoodMessage = document.getElementById('selected-food-message');
     const foodCelebration = document.getElementById('food-celebration');
-    const foodBackBtn = document.getElementById('food-back-btn');
     const confirmFoodBtn = document.getElementById('confirm-food-btn');
-    const customFoodBtn = document.querySelector('.custom-food-btn');
     const customFoodContainer = document.getElementById('custom-food-container');
     const customFoodInput = document.getElementById('custom-food-input');
     const addCustomFoodBtn = document.getElementById('add-custom-food');
@@ -55,12 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const drinkButtons = document.querySelectorAll('.drink-btn');
     const selectedDrinkMessage = document.getElementById('selected-drink-message');
     const drinksCelebration = document.getElementById('drinks-celebration');
-    const drinksBackBtn = document.getElementById('drinks-back-btn');
     const confirmDrinkBtn = document.getElementById('confirm-drink-btn');
-    const customDrinkBtn = document.querySelector('.custom-drink-btn');
-    const customDrinkContainer = document.getElementById('custom-drink-container');
-    const customDrinkInput = document.getElementById('custom-drink-input');
-    const addCustomDrinkBtn = document.getElementById('add-custom-drink');
     const finalDrinkMessage = document.getElementById('final-drink-message');
     
     // Completion page elements
@@ -594,10 +585,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle confirm location button click - with improved heart effects
     confirmLocationBtn.addEventListener('click', function() {
         if (selectedLocations.length > 0) {
-            // The message is already shown when a selection is made,
-            // so no need to show it again here
-            
-            // Store selected locations
             localStorage.setItem('selectedLocations', JSON.stringify(selectedLocations));
             
             // Add celebration hearts - shorter and more concentrated burst
@@ -660,45 +647,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1200); // Reduced from 1500ms to 1200ms
         }
     });
-    
-    // Back button handlers
-    if (locationBackBtn) {
-        locationBackBtn.addEventListener('click', function() {
-            // Transition back to success card
-            locationCard.style.transform = 'scale(0.8)';
-            locationCard.style.opacity = '0';
-            
-            setTimeout(() => {
-                locationCard.style.display = 'none';
-                successCard.style.display = 'block';
-                
-                setTimeout(() => {
-                    successCard.classList.remove('hidden');
-                    successCard.style.opacity = '1';
-                    successCard.style.transform = 'scale(1)';
-                }, 50);
-            }, 500);
-        });
-    }
-    
-    if (datetimeBackBtn) {
-        datetimeBackBtn.addEventListener('click', function() {
-            // Transition back to location card
-            datetimeCard.style.transform = 'scale(0.8)';
-            datetimeCard.style.opacity = '0';
-            
-            setTimeout(() => {
-                datetimeCard.style.display = 'none';
-                locationCard.style.display = 'block';
-                
-                setTimeout(() => {
-                    locationCard.classList.remove('hidden');
-                    locationCard.style.opacity = '1';
-                    locationCard.style.transform = 'scale(1)';
-                }, 50);
-            }, 500);
-        });
-    }
     
     // Function to create hearts
     function createHeart(container) {
@@ -917,26 +865,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     } else {
         console.error("Food next button not found in the DOM");
-    }
-    
-    // Back button handler for food page
-    if (foodBackBtn) {
-        foodBackBtn.addEventListener('click', function() {
-            // Transition back to datetime card
-            foodCard.style.transform = 'scale(0.8)';
-            foodCard.style.opacity = '0';
-            
-            setTimeout(() => {
-                foodCard.style.display = 'none';
-                datetimeCard.style.display = 'block';
-                
-                setTimeout(() => {
-                    datetimeCard.classList.remove('hidden');
-                    datetimeCard.style.opacity = '1';
-                    datetimeCard.style.transform = 'scale(1)';
-                }, 50);
-            }, 500);
-        });
     }
 
     // Food selection with toggle functionality
@@ -1231,49 +1159,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Back button handler for drinks page
-    if (drinksBackBtn) {
-        drinksBackBtn.addEventListener('click', function() {
-            // Transition back to food card
-            drinksCard.style.transform = 'scale(0.8)';
-            drinksCard.style.opacity = '0';
-            
-            setTimeout(() => {
-                drinksCard.style.display = 'none';
-                foodCard.style.display = 'block';
-                
-                setTimeout(() => {
-                    foodCard.classList.remove('hidden');
-                    foodCard.style.opacity = '1';
-                    foodCard.style.transform = 'scale(1)';
-                }, 50);
-            }, 500);
-        });
-    }
-    
     // Drinks selection with toggle functionality
     drinkButtons.forEach(button => {
         button.classList.remove('selected');
         button.addEventListener('click', function() {
             const selectedDrink = this.getAttribute('data-drink');
             const isSelected = this.classList.contains('selected');
-            
-            // Handle custom drink button differently
-            if (selectedDrink === 'custom') {
-                if (!customDrinkContainer.classList.contains('show')) {
-                    customDrinkContainer.classList.remove('hidden');
-                    customDrinkContainer.classList.add('show');
-                    setTimeout(() => {
-                        customDrinkInput.focus();
-                    }, 300);
-                } else {
-                    customDrinkContainer.classList.remove('show');
-                    setTimeout(() => {
-                        customDrinkContainer.classList.add('hidden');
-                    }, 500);
-                }
-                return;
-            }
             
             if (isSelected) {
                 // Toggle off: Remove from selected drinks with animation
@@ -1336,156 +1227,13 @@ document.addEventListener('DOMContentLoaded', function() {
             statusContainer.style.opacity = '0.5';
         } else {
             const regularDrinks = selectedDrinks.filter(drink => !drink.startsWith('custom:'));
-            const customDrinks = selectedDrinks.filter(drink => drink.startsWith('custom:')).length;
             
-            statusContainer.innerHTML = `Selected: ${selectedDrinks.length} ${selectedDrinks.length > 1 ? 'drinks' : 'drink'} 
-                ${customDrinks > 0 ? `(including ${customDrinks} custom ${customDrinks > 1 ? 'options' : 'option'})` : ''}`;
+            statusContainer.innerHTML = `Selected: ${selectedDrinks.length} ${selectedDrinks.length > 1 ? 'drinks' : 'drink'} ''}`;
             statusContainer.style.opacity = '1';
         }
     }
     
-    // Add custom drink functionality
-    function addCustomDrink() {
-        const drinkValue = customDrinkInput.value.trim();
-        
-        if (!drinkValue) {
-            // Visual feedback for empty input
-            customDrinkInput.classList.add('shake');
-            setTimeout(() => {
-                customDrinkInput.classList.remove('shake');
-            }, 500);
-            return;
-        }
-        
-        // Check if drink already exists in selected drinks
-        if (selectedDrinks.includes('custom:' + drinkValue)) {
-            // Alert user that the drink is already added with visual feedback
-            customDrinkInput.style.borderColor = '#ff3366';
-            customDrinkInput.classList.add('shake');
-            
-            // Find the duplicate badge and highlight it
-            const badges = document.querySelectorAll('.custom-drink-badge');
-            badges.forEach(badge => {
-                if (badge.textContent.includes(drinkValue)) {
-                    badge.style.transform = 'scale(1.1)';
-                    badge.style.boxShadow = '0 0 15px rgba(255, 107, 149, 0.7)';
-                    
-                    // Scroll to the duplicate item
-                    const container = document.querySelector('.custom-drink-list');
-                    if (container) {
-                        container.scrollTop = badge.offsetTop - container.offsetTop;
-                    }
-                    
-                    // Reset styles after animation
-                    setTimeout(() => {
-                        badge.style.transform = 'scale(1)';
-                        badge.style.boxShadow = '';
-                    }, 1000);
-                }
-            });
-            
-            setTimeout(() => {
-                customDrinkInput.style.borderColor = '';
-                customDrinkInput.classList.remove('shake');
-            }, 1000);
-            return;
-        }
-        
-        // Add to selected drinks
-        selectedDrinks.push('custom:' + drinkValue);
-        
-        // Create custom drink list container if it doesn't exist
-        let customDrinkList;
-        if (!document.querySelector('.custom-drink-list')) {
-            customDrinkList = document.createElement('div');
-            customDrinkList.className = 'custom-food-list small custom-drink-list'; // Reuse the food list classes
-            customDrinkContainer.appendChild(customDrinkList);
-        } else {
-            customDrinkList = document.querySelector('.custom-drink-list');
-        }
-        
-        const badge = document.createElement('div');
-        badge.className = 'custom-food-badge custom-drink-badge';
-        badge.innerHTML = `${drinkValue} <span>✕</span>`;
-        
-        // Add remove functionality
-        const removeSpan = badge.querySelector('span');
-        removeSpan.addEventListener('click', function() {
-            selectedDrinks = selectedDrinks.filter(drink => drink !== 'custom:' + drinkValue);
-            badge.style.opacity = '0';
-            badge.style.transform = 'scale(0.8)';
-            
-            // Update status after removal
-            updateDrinkSelectionStatus();
-            
-            setTimeout(() => {
-                badge.remove();
-                
-                // Show/hide continue button based on selection
-                if (selectedDrinks.length > 0) {
-                    confirmDrinkBtn.style.display = 'inline-block';
-                } else {
-                    confirmDrinkBtn.style.display = 'none';
-                    selectedDrinkMessage.classList.remove('show');
-                    selectedDrinkMessage.classList.add('hidden');
-                }
-                
-                // Hide the list container if empty
-                if (customDrinkList.children.length === 0) {
-                    customDrinkList.style.display = 'none';
-                }
-            }, 300);
-        });
-        
-        // Add badge with animation
-        badge.style.opacity = '0';
-        badge.style.transform = 'scale(0.8)';
-        customDrinkList.appendChild(badge);
-        customDrinkList.style.display = 'flex'; // Ensure list is visible
-        
-        // Animate badge appearance
-        setTimeout(() => {
-            badge.style.opacity = '1';
-            badge.style.transform = 'scale(1)';
-        }, 10);
-        
-        // Show message and confirm button
-        confirmDrinkBtn.style.display = 'inline-block';
-        selectedDrinkMessage.classList.remove('hidden');
-        selectedDrinkMessage.classList.add('show');
-        
-        // Update selection status
-        updateDrinkSelectionStatus();
-        
-        // Clear input and focus
-        customDrinkInput.value = '';
-        customDrinkInput.focus();
-        
-        // Scroll to the bottom of the list to show the new item
-        setTimeout(() => {
-            if (customDrinkList) {
-                customDrinkList.scrollTop = customDrinkList.scrollHeight;
-            }
-        }, 100);
-    }
-    
-    // Add custom drink button handler
-    if (addCustomDrinkBtn) {
-        addCustomDrinkBtn.addEventListener('click', function() {
-            addCustomDrink();
-        });
-    }
-    
-    // Enter key for custom drink input
-    if (customDrinkInput) {
-        customDrinkInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                addCustomDrink();
-            }
-        });
-    }
-    
-    // Handle confirm drink button click - Removing Clear My Selection button
+    // Handle confirm drink button click
     if (confirmDrinkBtn) {
         confirmDrinkBtn.addEventListener('click', function() {
             if (selectedDrinks.length > 0) {
@@ -1522,16 +1270,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     btn.style.opacity = '0.7';
                     btn.style.cursor = 'default';
                 });
-                
-                // Disable custom drink input
-                if (customDrinkInput) {
-                    customDrinkInput.disabled = true;
-                    addCustomDrinkBtn.disabled = true;
-                    customDrinkInput.style.opacity = '0.7';
-                    addCustomDrinkBtn.style.opacity = '0.7';
-                }
-                
-                // No Clear My Selection button anymore
             }
         });
     }
@@ -1698,69 +1436,103 @@ document.addEventListener('DOMContentLoaded', function() {
     // Auto-clear data when leaving the page
     window.addEventListener('beforeunload', function() {
         localStorage.removeItem('selectedLocations');
-        localStorage.removeItem('customLocations');
         localStorage.removeItem('dateOptions');
-    });
-    
-    // Remove references to custom locations card and related functionality
-    const customLocationsCard = document.getElementById('custom-locations-card');
-    const customLocationsBackBtn = document.getElementById('custom-locations-back-btn');
-    const addCustomLocationBtn = document.getElementById('add-custom-location');
-    const customLocationsContainer = document.querySelector('.custom-locations-container');
-    const confirmCustomLocationsBtn = document.getElementById('confirm-custom-locations');
-    const selectedPlacesList = document.querySelector('.selected-places-list');
-    
-    // Array to store custom locations
-    let customLocations = [];
-    
-    // Replace the custom location button click handler with direct selection
-    document.querySelector('.location-btn[data-location="somewhere-else"]').addEventListener('click', function() {
-        this.classList.toggle('selected');
-        if (this.classList.contains('selected')) {
-            selectedLocations.push('somewhere-else');
-            createHeartBurst(this, 15);
-        } else {
-            selectedLocations = selectedLocations.filter(location => location !== 'somewhere-else');
-        }
-        
-        // Update selection message and button
-        if (selectedLocations.length > 0) {
-            selectedLocationMessage.classList.remove('hidden');
-            selectedLocationMessage.classList.add('show');
-            confirmLocationBtn.style.display = 'inline-block';
-            
-            // Create heart effect around confirm button
-            createButtonHeartEffect(confirmLocationBtn);
-        } else {
-            selectedLocationMessage.classList.remove('show');
-            selectedLocationMessage.classList.add('hidden');
-            confirmLocationBtn.style.display = 'none';
-        }
     });
     
     // Handle next button to show completion page with proper centering
     if (completionNextBtn) {
         completionNextBtn.addEventListener('click', function() {
-            drinksCard.classList.add('hidden');
-            completionCard.classList.remove('hidden');
+            // Hide drinks card with animation
+            drinksCard.style.transform = 'scale(0.8)';
+            drinksCard.style.opacity = '0';
             
-            // Ensure the completion card is centered properly
-            completionCard.style.transform = 'none'; // Reset any transforms
-            completionCard.style.opacity = '0';
-            
-            // Create smooth appearance animation with proper positioning
             setTimeout(() => {
-                completionCard.style.opacity = '1';
-                document.body.scrollTop = 0; // For Safari
-                document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-                window.scrollTo(0, 0);
-            }, 10);
-            
-            // Create completion celebration effects
-            createCompletionCelebration();
+                drinksCard.style.display = 'none';
+                
+                // Show completion card
+                completionCard.style.display = 'block';
+                
+                setTimeout(() => {
+                    completionCard.classList.add('show');
+                    
+                    // Scroll to top
+                    document.body.scrollTop = 0; // For Safari
+                    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                    
+                    // Create completion celebration effects
+                    createCompletionCelebration();
+                }, 50);
+            }, 500);
         });
     }
-
+    
+    // Create completion celebration with lots of hearts
+    function createCompletionCelebration() {
+        // Initial burst of hearts
+        for (let i = 0; i < 100; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                // Random position
+                const startX = 50 + (Math.random() * 20 - 10); // Center-ish
+                const startY = 70 + (Math.random() * 20 - 10); // Bottom-ish
+                
+                heart.style.left = startX + '%';
+                heart.style.top = startY + '%';
+                
+                // Random size
+                const size = Math.random() * 30 + 10; // 10-40px
+                heart.style.width = size + 'px';
+                heart.style.height = size + 'px';
+                
+                // Random animation duration
+                const duration = Math.random() * 3 + 2; // 2-5 seconds
+                heart.style.animationDuration = duration + 's';
+                
+                // Random opacity
+                heart.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                completionHearts.appendChild(heart);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000);
+            }, i * 30);
+        }
+        
+        // Continuous hearts
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // Random position from bottom
+            const startX = Math.random() * 100;
+            heart.style.left = startX + '%';
+            heart.style.top = '100%';
+            
+            // Random size
+            const size = Math.random() * 20 + 10; // 10-30px
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+            
+            // Random animation
+            const duration = Math.random() * 4 + 3; // 3-7 seconds
+            heart.style.animationDuration = duration + 's';
+            
+            // Random starting delay
+            heart.style.animationDelay = Math.random() + 's';
+            
+            completionHearts.appendChild(heart);
+            
+            // Remove after animation
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000 + 1000);
+        }, 300);
+    }
+    
     // Celebration animation for success
     function celebrateSuccess() {
         for (let i = 0; i < 100; i++) {
@@ -1907,66 +1679,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Auto-clear data when leaving the page
     window.addEventListener('beforeunload', function() {
         localStorage.removeItem('selectedLocations');
-        localStorage.removeItem('customLocations');
         localStorage.removeItem('dateOptions');
     });
-    
-    // Add a selected place badge
-    function addSelectedPlaceBadge(place) {
-        // Check if place already exists
-        if (customLocations.includes(place)) {
-            // Visual feedback for duplicate
-            const inputs = customLocationsContainer.querySelectorAll('.custom-place-input');
-            inputs.forEach(input => {
-                if (input.value.trim() === place) {
-                    input.style.borderColor = '#ff3366';
-                    setTimeout(() => {
-                        input.style.borderColor = '';
-                    }, 1000);
-                }
-            });
-            return;
-        }
-        
-        // Add to array
-        customLocations.push(place);
-        
-        // Create badge
-        const badge = document.createElement('div');
-        badge.className = 'selected-place-badge';
-        badge.innerHTML = `${place} <span>✕</span>`;
-        
-        // Add remove handler
-        const removeSpan = badge.querySelector('span');
-        removeSpan.addEventListener('click', function() {
-            // Remove from array
-            customLocations = customLocations.filter(p => p !== place);
-            
-            // Remove badge with animation
-            badge.style.opacity = '0';
-            badge.style.transform = 'translateY(-10px)';
-            setTimeout(() => {
-                badge.remove();
-                
-                // Hide confirm button if no places
-                if (customLocations.length === 0) {
-                    confirmCustomLocationsBtn.style.display = 'none';
-                }
-            }, 300);
-        });
-        
-        // Add badge to the list
-        selectedPlacesList.appendChild(badge);
-        
-        // Show the confirm button
-        confirmCustomLocationsBtn.style.display = 'inline-block';
-        
-        // Heart burst effect
-        const inputElement = document.activeElement;
-        if (inputElement && inputElement.classList.contains('custom-place-input')) {
-            createHeartBurst(inputElement, 8);
-        }
-    }
 
     // Check for any pre-selected buttons and remove the selection
     document.querySelectorAll('.location-btn.selected').forEach(button => {
@@ -1978,7 +1692,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Alternative approach without confirmation (will run automatically)
     window.addEventListener('beforeunload', function() {
         localStorage.removeItem('selectedLocations');
-        localStorage.removeItem('customLocations');
         localStorage.removeItem('dateOptions'); 
         // localStorage.removeItem('darkMode');
     });
@@ -2163,213 +1876,31 @@ document.addEventListener('DOMContentLoaded', function() {
     if (foodCard) updateFoodSelectionStatus();
     if (drinksCard) updateDrinkSelectionStatus();
     
-    // Fixed custom location selection behavior
-    document.querySelector('.custom-location-btn').addEventListener('click', function() {
-        // Don't automatically select this button - we'll only select it if custom places are added
-        this.classList.remove('selected');
-        
-        // Preserve icon colors
-        const icon = this.querySelector('.svg-icon');
-        if (icon) {
-            icon.style.color = ''; // Reset any inline color style
-        }
-        
-        // Transition to custom locations page
-        locationCard.style.transform = 'scale(0.8)';
-        locationCard.style.opacity = '0';
-        
-        setTimeout(() => {
-            locationCard.classList.add('hidden');
-            customLocationsCard.classList.remove('hidden');
-            customLocationsCard.style.transform = 'scale(1)';
-            customLocationsCard.style.opacity = '1';
-            
-            // Focus on the first input field
-            const firstInput = customLocationsCard.querySelector('.custom-place-input');
-            if (firstInput) {
-                setTimeout(() => {
-                    firstInput.focus();
-                }, 300);
-            }
-        }, 500);
-    });
-    
-    // Add Enter key functionality for custom location inputs
-    function setupCustomLocationInput(input) {
-        input.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const value = this.value.trim();
-                if (value) {
-                    // Add the place and clear input
-                    addSelectedPlaceBadge(value);
-                    this.value = '';
-                    
-                    // Add a new row
-                    addCustomLocationRow();
-                }
-            }
-        });
-    }
-    
-    // Initialize the first input with enter key functionality
-    const initialInput = document.querySelector('.custom-place-input');
-    if (initialInput) {
-        setupCustomLocationInput(initialInput);
-    }
-    
-    // Fixed version of addCustomLocationRow function
-    function addCustomLocationRow() {
-        const row = document.createElement('div');
-        row.className = 'custom-location-row';
-        
-        const inputContainer = document.createElement('div');
-        inputContainer.className = 'custom-location-input';
-        
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.className = 'custom-place-input';
-        input.placeholder = 'Enter a place you want to visit...';
-        
-        // Setup Enter key functionality for the new input
-        setupCustomLocationInput(input);
-        
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'remove-custom-location btn-icon';
-        removeBtn.title = 'Remove this place';
-        removeBtn.innerHTML = '<span>✕</span>';
-        
-        // Handle remove button click - fix to allow removing any row
-        removeBtn.addEventListener('click', function() {
-            // Animation for smooth removal
-            row.style.opacity = '0';
-            row.style.transform = 'scale(0.8)';
-            
-            setTimeout(() => {
-                // Remove the row
-                row.remove();
-                
-                // If this was the last row, add a new empty one
-                if (customLocationsContainer.querySelectorAll('.custom-location-row').length === 0) {
-                    const newRow = addCustomLocationRow();
-                    setTimeout(() => {
-                        newRow.querySelector('input').focus();
-                    }, 50);
-                }
-            }, 300);
-        });
-        
-        inputContainer.appendChild(input);
-        row.appendChild(inputContainer);
-        row.appendChild(removeBtn);
-        
-        customLocationsContainer.appendChild(row);
-        
-        // Smooth animation for adding
-        row.style.opacity = '0';
-        row.style.transform = 'scale(0.8)';
-        setTimeout(() => {
-            row.style.opacity = '1';
-            row.style.transform = 'scale(1)';
-        }, 10);
-        
-        return row;
-    }
-    
-    // Modified version of confirm custom locations to properly select the button
-    confirmCustomLocationsBtn.addEventListener('click', function() {
-        // Check inputs for any additional places
-        const inputs = customLocationsContainer.querySelectorAll('.custom-place-input');
-        let foundNewPlace = false;
-        
-        inputs.forEach(input => {
-            const value = input.value.trim();
-            if (value) {
-                addSelectedPlaceBadge(value);
-                foundNewPlace = true;
-                input.value = '';
-            }
-        });
-        
-        if (customLocations.length === 0) {
-            // Alert user to add at least one place
-            const input = customLocationsContainer.querySelector('.custom-place-input');
-            if (input) {
-                input.classList.add('shake');
-                setTimeout(() => {
-                    input.classList.remove('shake');
-                }, 500);
-            }
-            return;
-        }
-        
-        // Store the custom locations
-        localStorage.setItem('customLocations', JSON.stringify(customLocations));
-        
-        // Select the custom location button
-        const customLocationBtn = document.querySelector('.custom-location-btn');
-        if (customLocationBtn) {
-            customLocationBtn.classList.add('selected');
-        }
-        
-        // Add custom locations to the selected locations
-        customLocations.forEach(place => {
-            if (!selectedLocations.includes('custom:' + place)) {
-                selectedLocations.push('custom:' + place);
-            }
-        });
-        
-        // Update location counter
-        updateLocationCounter();
-        
-        // Heart celebration
-        for (let i = 0; i < 30; i++) {
-            setTimeout(() => {
-                createHeart(customLocationsCard.querySelector('.hearts-celebration'));
-            }, i * 50);
-        }
-        
-        // Return to the location page after a moment
-        setTimeout(() => {
-            customLocationsCard.style.transform = 'scale(0.8)';
-            customLocationsCard.style.opacity = '0';
-            
-            setTimeout(() => {
-                customLocationsCard.classList.add('hidden');
-                locationCard.classList.remove('hidden');
-                locationCard.style.transform = 'scale(1)';
-                locationCard.style.opacity = '1';
-                
-                // Also show the continue button if locations are selected
-                if (selectedLocations.length > 0) {
-                    confirmLocationBtn.style.display = 'inline-block';
-                    selectedLocationMessage.classList.remove('hidden');
-                    selectedLocationMessage.classList.add('show');
-                }
-            }, 500);
-        }, 1200);
-    });
     
     // Handle next button to show completion page with proper centering
     if (completionNextBtn) {
         completionNextBtn.addEventListener('click', function() {
-            drinksCard.classList.add('hidden');
-            completionCard.classList.remove('hidden');
+            // Hide drinks card with animation
+            drinksCard.style.transform = 'scale(0.8)';
+            drinksCard.style.opacity = '0';
             
-            // Ensure the completion card is centered properly
-            completionCard.style.transform = 'none'; // Reset any transforms
-            completionCard.style.opacity = '0';
-            
-            // Create smooth appearance animation with proper positioning
             setTimeout(() => {
-                completionCard.style.opacity = '1';
-                document.body.scrollTop = 0; // For Safari
-                document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-                window.scrollTo(0, 0);
-            }, 10);
-            
-            // Create completion celebration effects
-            createCompletionCelebration();
+                drinksCard.style.display = 'none';
+                
+                // Show completion card
+                completionCard.style.display = 'block';
+                
+                setTimeout(() => {
+                    completionCard.classList.add('show');
+                    
+                    // Scroll to top
+                    document.body.scrollTop = 0; // For Safari
+                    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                    
+                    // Create completion celebration effects
+                    createCompletionCelebration();
+                }, 50);
+            }, 500);
         });
     }
     
