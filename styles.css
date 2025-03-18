@@ -1673,8 +1673,8 @@ body:hover .scrollbar-decoration {
 
 /* Selected state for drink buttons */
 .drink-btn.selected {
-    background-color: #e2f0ff;
-    border-color: #6bb5ff;
+    background-color: #ffe2e9;
+    border-color: #ff6b95;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(107, 181, 255, 0.2);
 }
@@ -1700,7 +1700,7 @@ body:hover .scrollbar-decoration {
 
 .dark-mode .drink-btn.selected {
     background-color: #2a3c4d;
-    border-color: #6bb5ff;
+    border-color: #ff6b95;
     box-shadow: 0 4px 12px rgba(107, 181, 255, 0.15);
 }
 
@@ -1742,7 +1742,7 @@ body:hover .scrollbar-decoration {
 }
 
 .drink-btn.selected:after {
-    color: #6bb5ff;
+    color: #ff6b95;
 }
 
 @keyframes fade-in {
@@ -1799,11 +1799,11 @@ body:hover .scrollbar-decoration {
     fill: #ff6b95;
 }
 
-.drink-btn.selected .svg-icon svg path,
+/* .drink-btn.selected .svg-icon svg path,
 .drink-btn.selected .svg-icon svg rect,
 .drink-btn.selected .svg-icon svg polygon {
-    fill: #6bb5ff;
-}
+    fill: #e2f0ff;
+} */
 
 /* Improve accessibility - focus states */
 .food-btn:focus, .drink-btn:focus {
