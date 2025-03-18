@@ -1258,218 +1258,6 @@ body:hover .scrollbar-decoration {
     75% { transform: rotate(5deg); }
 }
 
-/* Custom locations page styling */
-.custom-locations-container {
-    margin: 20px 0;
-    max-height: 280px;
-    overflow-y: auto;
-    padding-right: 5px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.custom-location-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    animation: fadeIn 0.5s ease-out;
-    transition: all 0.3s ease;
-}
-
-.custom-location-input {
-    flex: 1;
-}
-
-.custom-location-input input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid rgba(255, 182, 193, 0.5);
-    border-radius: 12px;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
-    background: white;
-    color: #333;
-    transition: all 0.3s ease;
-}
-
-.dark-mode .custom-location-input input {
-    background: #1e1e1e;
-    border-color: rgba(255, 107, 149, 0.3);
-    color: #e6e6e6;
-}
-
-.custom-location-input input:focus {
-    border-color: rgba(255, 107, 149, 0.8);
-    outline: none;
-    box-shadow: 0 4px 10px rgba(255, 107, 149, 0.2);
-}
-
-.custom-location-input input::placeholder {
-    color: #aaa;
-    transition: color 0.3s ease;
-}
-
-.custom-location-input input:focus::placeholder {
-    color: #ccc;
-}
-
-.dark-mode .custom-location-input input::placeholder {
-    color: #777;
-}
-
-.dark-mode .custom-location-input input:focus::placeholder {
-    color: #999;
-}
-
-.remove-custom-location {
-    background: none;
-    border: none;
-    color: #ff6b95;
-    cursor: pointer;
-    font-size: 18px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
-
-.remove-custom-location:hover {
-    background: rgba(255, 107, 149, 0.1);
-    transform: scale(1.1);
-}
-
-.dark-mode .remove-custom-location {
-    color: #ff8bb3;
-}
-
-.dark-mode .remove-custom-location:hover {
-    background: rgba(255, 139, 179, 0.2);
-}
-
-.custom-locations-actions {
-    margin-top: 20px;
-}
-
-.selected-places-list {
-    margin: 15px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    min-height: 40px;
-    padding: 5px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.selected-places-list:empty {
-    display: none;
-}
-
-.selected-places-list:not(:empty) {
-    background: rgba(255, 107, 149, 0.05);
-    padding: 10px;
-    margin: 20px 0;
-}
-
-.selected-place-badge {
-    background: linear-gradient(45deg, #ff6b95, #ff8bb3);
-    color: white;
-    border-radius: 20px;
-    padding: 5px 15px;
-    font-size: 14px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(255, 107, 149, 0.25);
-    animation: badge-pop 0.3s ease-out;
-    position: relative;
-    padding-right: 30px;
-    transition: all 0.3s ease;
-}
-
-.selected-place-badge span {
-    position: absolute;
-    right: 10px;
-    cursor: pointer;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    font-size: 10px;
-    transition: all 0.2s ease;
-}
-
-.selected-place-badge span:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: scale(1.1);
-}
-
-.selected-place-badge:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(255, 107, 149, 0.3);
-}
-
-/* Improve add location button styling */
-#add-custom-location {
-    margin-bottom: 10px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-#add-custom-location:hover {
-    transform: translateY(-2px);
-}
-
-#add-custom-location:active {
-    transform: translateY(0);
-}
-
-/* Improved custom location cards */
-#custom-locations-card {
-    max-width: 550px;
-}
-
-@media (max-width: 500px) {
-    .custom-locations-container {
-        max-height: 220px;
-    }
-    
-    .selected-place-badge {
-        font-size: 12px;
-        padding: 4px 12px 4px 10px;
-    }
-    
-    .food-btn {
-        padding: 10px;
-    }
-    
-    .food-btn .svg-icon {
-        height: 24px;
-    }
-    
-    .food-btn .svg-icon svg {
-        height: 24px;
-    }
-    
-    .custom-food-container {
-        padding: 10px;
-    }
-    
-    .custom-food-badge {
-        font-size: 12px;
-        padding: 6px 10px 6px 12px;
-    }
-}
-
 /* Style info icon in final message */
 .info-icon {
     cursor: help;
@@ -1839,23 +1627,6 @@ body:hover .scrollbar-decoration {
     background: #fff;
 }
 
-/* Custom drink input styling */
-#custom-drink-container {
-    margin: 20px 0;
-    padding: 15px;
-    border-radius: 15px;
-    background: rgba(255, 107, 149, 0.05);
-    transition: all 0.5s ease;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-}
-
-#custom-drink-container.show {
-    max-height: 350px;
-    opacity: 1;
-}
-
 /* Drink selection status indicator */
 .drink-selection-status {
     margin: 10px 0 15px;
@@ -1870,54 +1641,6 @@ body:hover .scrollbar-decoration {
 .dark-mode .drink-selection-status {
     background: rgba(255, 139, 179, 0.15);
     color: #ff8bb3;
-}
-
-/* Custom food badge styling to ensure proper deletion */
-.custom-food-badge, .custom-drink-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    margin: 5px;
-    background: linear-gradient(45deg, #ff6b95, #ff8bb3);
-    color: white;
-    border-radius: 20px;
-    font-size: 14px;
-    box-shadow: 0 3px 6px rgba(255, 107, 149, 0.2);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-}
-
-.custom-food-badge span, .custom-drink-badge span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.7);
-    color: #ff6b95;
-    margin-left: 8px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.custom-food-badge span:hover, .custom-drink-badge span:hover {
-    background: white;
-    transform: scale(1.1);
-}
-
-.custom-food-list, .custom-drink-list {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 10px 0;
-    max-height: 0;
-    overflow-y: auto;
-    transition: all 0.5s ease;
-    width: 100%;
-}
-
-.custom-food-list.show, .custom-drink-list.show {
-    max-height: 150px;
 }
 
 /* Enhanced food and drink selection styling */
@@ -2082,18 +1805,6 @@ body:hover .scrollbar-decoration {
     fill: #6bb5ff;
 }
 
-/* Handle special multi-color SVGs */
-.food-btn.selected .svg-icon svg .svg-brown,
-.food-btn.selected .svg-icon svg .svg-fries,
-.food-btn.selected .svg-icon svg .svg-fries-dark,
-.food-btn.selected .svg-icon svg .svg-burger,
-.food-btn.selected .svg-icon svg .svg-red,
-.food-btn.selected .svg-icon svg .svg-red-top,
-.food-btn.selected .svg-icon svg .svg-orange,
-.food-btn.selected .svg-icon svg .svg-burger-seeds {
-    fill: #ff8ca8;
-}
-
 /* Improve accessibility - focus states */
 .food-btn:focus, .drink-btn:focus {
     outline: none;
@@ -2104,7 +1815,10 @@ body:hover .scrollbar-decoration {
     box-shadow: 0 0 0 2px rgba(107, 181, 255, 0.5);
 }
 
-/* ...existing code... */
+.tea-svg {
+    fill: none;
+    stroke: #ff6b95;
+}
 
 /* Enhanced unified styling for location, food and drink buttons */
 .location-btn, .food-btn, .drink-btn {
