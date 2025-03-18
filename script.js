@@ -1838,36 +1838,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 const selectedDrink = this.getAttribute('data-drink');
                 const isSelected = this.classList.contains('selected');
                 
-                if (selectedDrink === 'custom') {
-                    // Custom drink handling...
-                    // ...existing code...
+                if (isSelected) {
+                    this.classList.remove('selected');
+                    selectedDrinks = selectedDrinks.filter(drink => drink !== selectedDrink);
                 } else {
-                    // Toggle selection without changing SVG colors
-                    if (isSelected) {
-                        this.classList.remove('selected');
-                        selectedDrinks = selectedDrinks.filter(drink => drink !== selectedDrink);
-                    } else {
-                        this.classList.add('selected');
-                        selectedDrinks.push(selectedDrink);
+                    this.classList.add('selected');
+                    selectedDrinks.push(selectedDrink);
                         
-                        // Add heart burst effect
-                        createHeartBurst(this, 15);
-                    }
-                    
-                    // Show/hide continue button based on selection
-                    if (selectedDrinks.length > 0) {
-                        confirmDrinkBtn.style.display = 'inline-block';
-                        selectedDrinkMessage.classList.remove('hidden');
-                        selectedDrinkMessage.classList.add('show');
-                    } else {
-                        confirmDrinkBtn.style.display = 'none';
-                        selectedDrinkMessage.classList.remove('show');
-                        selectedDrinkMessage.classList.add('hidden');
-                    }
-                    
-                    // Update status - now located above the options
-                    updateDrinkSelectionStatus();
+                    // Add heart burst effect
+                    createHeartBurst(this, 15);
                 }
+                    
+                // Show/hide continue button based on selection
+                if (selectedDrinks.length > 0) {
+                    confirmDrinkBtn.style.display = 'inline-block';
+                    selectedDrinkMessage.classList.remove('hidden');                        selectedDrinkMessage.classList.add('show');
+                } else {
+                    confirmDrinkBtn.style.display = 'none';
+                    selectedDrinkMessage.classList.remove('show');
+                    selectedDrinkMessage.classList.add('hidden');
+                }
+                // Update status - now located above the options
+                updateDrinkSelectionStatus();
             });
         });
     }
