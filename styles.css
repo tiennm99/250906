@@ -1815,9 +1815,13 @@ body:hover .scrollbar-decoration {
     box-shadow: 0 0 0 2px rgba(107, 181, 255, 0.5);
 }
 
-.tea-svg {
-    fill: none;
-    stroke: #ff6b95;
+.location-btn .location-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.dark-mode .location-btn .location-icon {
+    fill: inherit;
 }
 
 /* Enhanced unified styling for location, food and drink buttons */
