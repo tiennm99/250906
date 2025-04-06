@@ -1962,4 +1962,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }, duration * 1000 + 1000);
         }, 300);
     }
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        const madeByLine = document.createElement('div');
+        madeByLine.textContent = 'made by techmoocher';
+        madeByLine.style.textAlign = 'center'; // Optional: Center the text
+        madeByLine.style.marginTop = '10px'; // Optional: Add some space above the text
+        card.appendChild(madeByLine);
+    });
 });
