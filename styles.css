@@ -6,18 +6,17 @@
 }
 
 body {
-    background-color: #f8e9ec; /* Darker shade for light mode */
-    background-image: linear-gradient(45deg, #f8e9ec 0%, #ffdee5 100%); /* Less bright gradient */
+    background-color: #f8e9ec;
+    background-image: linear-gradient(45deg, #f8e9ec 0%, #ffdee5 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden; /* Allow vertical scrolling but prevent horizontal */
+    overflow-x: hidden;
     overflow-y: auto;
     transition: background-color 0.5s ease-out, color 0.5s ease-out;
 }
 
-/* Dark mode styles - updated colors */
 body.dark-mode {
     background-color: #2d2123;
     background-image: linear-gradient(45deg, #2d2123 0%, #20181a 100%);
@@ -48,12 +47,11 @@ body.dark-mode {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><path d="M20 0C18 10 10 18 0 20C10 22 18 30 20 40C22 30 30 22 40 20C30 18 22 10 20 0Z" fill="%23ff8bb3" opacity="0.7"/></svg>');
 }
 
-/* Theme toggle styling - updated to be cuter */
 .theme-toggle {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 2000; /* Ensure it's above all other elements */
+    z-index: 2000;
     cursor: pointer;
 }
 
@@ -68,7 +66,7 @@ body.dark-mode {
     cursor: pointer;
     transition: 0.3s;
     border: 2px solid rgba(255, 182, 193, 0.5);
-    box-sizing: border-box; /* Ensure padding and border are included in width/height */
+    box-sizing: border-box;
 }
 
 .theme-toggle label:after {
@@ -88,7 +86,7 @@ body.dark-mode {
     width: 0;
     height: 0;
     visibility: hidden;
-    position: absolute; /* Ensure it doesn't interfere with layout */
+    position: absolute;
 }
 
 .theme-toggle input:checked + label {
@@ -96,10 +94,9 @@ body.dark-mode {
     border-color: rgba(123, 104, 238, 0.4);
 }
 
-/* Fix the toggle circle going outside the container */
 .theme-toggle input:checked + label:after {
-    left: calc(100% - 28px); /* 100% minus circle width (26px) minus right offset (2px) */
-    transform: translateX(0); /* Remove translateX(-100%) to fix positioning */
+    left: calc(100% - 28px);
+    transform: translateX(0);
     background: linear-gradient(45deg, #7986cb, #5c6bc0);
 }
 
@@ -133,7 +130,6 @@ body.dark-mode {
     fill: #e0e0ff;
 }
 
-/* Perpetual hearts styling */
 .perpetual-hearts {
     position: fixed;
     width: 100%;
@@ -142,7 +138,7 @@ body.dark-mode {
     left: 0;
     pointer-events: none;
     z-index: 1;
-    display: none; /* Hidden initially, will be shown after success */
+    display: none;
 }
 
 .perpetual-heart {
@@ -182,8 +178,8 @@ body.dark-mode {
     max-width: 500px;
     padding: 20px;
     z-index: 10;
-    max-height: 90vh; /* Limit height to enable scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .card {
@@ -211,7 +207,7 @@ body.dark-mode {
 
 .card-content {
     position: relative;
-    z-index: 2; /* Ensure card content is above nervous cat */
+    z-index: 2;
 }
 
 h1 {
@@ -239,7 +235,6 @@ h1 {
     border-radius: 2px;
 }
 
-/* Special styling for "gorgeous" */
 .gorgeous {
     background: linear-gradient(45deg, #ff6b95, #ff8bb3, #ff6b95);
     background-size: 200% auto;
@@ -407,7 +402,7 @@ h1 {
     justify-content: center;
     align-items: center;
     margin-top: 15px;
-    position: relative; /* Added position relative for absolute positioned hearts */
+    position: relative;
 }
 
 .cat-svg {
@@ -415,15 +410,14 @@ h1 {
     height: auto;
     filter: drop-shadow(0 5px 10px rgba(255, 107, 149, 0.3));
     animation: bounce 3s ease-in-out infinite;
-    position: relative; /* Added position relative */
-    z-index: 2; /* Ensure cat is above hearts */
+    position: relative;
+    z-index: 2;
 }
 
 .dark-mode .cat-svg g {
     fill: #ff8bb3;
 }
 
-/* Cat heart decorations */
 .cat-hearts {
     position: absolute;
     width: 100%;
@@ -481,7 +475,6 @@ h1 {
     }
 }
 
-/* Next step styling with arrow */
 .next-step {
     margin-top: 20px;
     display: flex;
@@ -502,12 +495,10 @@ h1 {
     color: #bbb;
 }
 
-/* Remove the location-arrow class styles since we're not using it anymore */
 .location-arrow {
     display: none;
 }
 
-/* Location selection styling */
 .location-options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -515,46 +506,9 @@ h1 {
     margin: 20px 0;
 }
 
-.location-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-    border: 2px solid rgba(255, 182, 193, 0.3);
-    border-radius: 15px;
-    background-color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.dark-mode .location-btn {
-    background-color: #1e1e1e;
-    border-color: rgba(255, 107, 149, 0.3);
-    color: #e6e6e6;
-}
-
-.location-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px rgba(255, 107, 149, 0.2);
-    border-color: rgba(255, 107, 149, 0.5);
-}
-
-.location-btn.selected {
-    background: linear-gradient(45deg, #ff6b95, #ff8bb3);
-    color: white;
-    border-color: transparent;
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(255, 107, 149, 0.3);
-}
-
 .location-icon {
     font-size: 24px;
     margin-bottom: 10px;
-}
-
-.location-btn span:nth-child(2) {
-    font-weight: 600;
 }
 
 .selected-location-message {
@@ -569,7 +523,6 @@ h1 {
     transform: translateY(0);
 }
 
-/* Cherry blossom background */
 .cherry-blossoms {
     position: fixed;
     width: 100%;
@@ -600,7 +553,6 @@ h1 {
     }
 }
 
-/* Cute Arrow Pointer styling */
 .cute-arrow-pointer {
     position: absolute;
     width: 80px;
@@ -609,16 +561,14 @@ h1 {
     animation: floatArrow 3s ease-in-out infinite;
 }
 
-/* Position the YES button arrow */
 #yes-arrow {
     right: 30px;
     top: 58%;
 }
 
-/* Position the success arrow at the bottom right corner outside the card */
 #success-arrow {
-    right: -90px; /* Position it outside the card */
-    bottom: 10px; /* Position at bottom */
+    right: -90px;
+    bottom: 10px;
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
@@ -640,9 +590,8 @@ h1 {
     align-items: center;
 }
 
-/* Style the right-pointing arrow */
 .right-arrow {
-    transform: rotate(0deg) !important; /* Force horizontal orientation */
+    transform: rotate(0deg) !important;
 }
 
 .right-arrow .arrow-shaft {
@@ -728,7 +677,6 @@ h1 {
     }
 }
 
-/* Enhanced nervous cat styling - more intense shaking */
 .nervous-cat {
     position: absolute;
     top: 10px;
@@ -739,7 +687,6 @@ h1 {
     animation: nervousShake 0.3s infinite;
 }
 
-/* More intense nervous shaking animation */
 @keyframes nervousShake {
     0% { transform: scale(0.7) translateX(0) rotate(0deg); }
     25% { transform: scale(0.7) translateX(-3px) rotate(-1deg); }
@@ -748,47 +695,6 @@ h1 {
     100% { transform: scale(0.7) translateX(0) rotate(0deg); }
 }
 
-/* Enhanced sweat drops - more frequent and faster animation */
-.sweat-drop {
-    animation: sweatDrip 1.5s infinite; /* Faster animation */
-    opacity: 0.8;
-    transform-origin: center top;
-    filter: drop-shadow(0 0 2px rgba(163, 217, 255, 0.5));
-}
-
-.drop1 {
-    animation-delay: 0s;
-}
-
-.drop2 {
-    animation-delay: 0.3s; /* Reduced delay for more overlapping drops */
-}
-
-.drop3 {
-    animation-delay: 0.6s; /* Reduced delay for more overlapping drops */
-}
-
-/* Enhanced sweat dripping animation */
-@keyframes sweatDrip {
-    0% {
-        transform: translateY(0) scale(0.3);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.9;
-        transform: translateY(0) scale(0.3);
-    }
-    70% {
-        transform: translateY(100px) scale(1);
-        opacity: 0.9;
-    }
-    100% {
-        transform: translateY(150px) scale(0.5);
-        opacity: 0;
-    }
-}
-
-/* Date & Time selection styling */
 .datetime-container {
     margin: 20px 0;
 }
@@ -903,7 +809,6 @@ h1 {
     margin-top: 30px;
 }
 
-/* Calendar & time picker custom styling - enhanced version - fix corrupted code */
 .flatpickr-calendar {
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(255, 107, 149, 0.2);
@@ -938,42 +843,44 @@ h1 {
     font-weight: 600;
 }
 
-/* Beautiful aesthetic scrollbar with transparent background - fixed for global use */
-::-webkit-scrollbar {
-    width: 12px;
-    display: block; /* Always show scrollbar */
+::-webkit-scrollbar,
+* ::-webkit-scrollbar {
+    width: 10px;
+    display: block;
 }
 
-::-webkit-scrollbar-track {
-    background: transparent; /* Transparent track */
-    margin: 10px 0;
+::-webkit-scrollbar-track,
+* ::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 4px 0;
 }
 
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb,
+* ::-webkit-scrollbar-thumb {
     background: linear-gradient(45deg, #ffb6c1, #ff8bb3);
-    border-radius: 20px;
-    border: 3px solid transparent; /* Transparent border */
-    background-clip: padding-box; /* Makes the scrollbar float with transparent edges */
-    box-shadow: 0 0 8px rgba(255, 107, 149, 0.2);
-    transition: all 0.3s ease;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    box-shadow: 0 0 5px rgba(255, 107, 149, 0.15);
 }
 
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover,
+* ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(45deg, #ff6b95, #ffb6c1);
-    box-shadow: 0 0 12px rgba(255, 107, 149, 0.4);
+    box-shadow: 0 0 8px rgba(255, 107, 149, 0.3);
 }
 
-.dark-mode ::-webkit-scrollbar-thumb {
+.dark-mode ::-webkit-scrollbar-thumb,
+.dark-mode * ::-webkit-scrollbar-thumb {
     background: linear-gradient(45deg, #ff8bb3, #ff6b95);
-    box-shadow: 0 0 8px rgba(255, 139, 179, 0.3);
 }
 
-.dark-mode ::-webkit-scrollbar-thumb:hover {
+.dark-mode ::-webkit-scrollbar-thumb:hover,
+.dark-mode * ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(45deg, #ff6b95, #ff8bb3);
     box-shadow: 0 0 12px rgba(255, 139, 179, 0.5);
 }
 
-/* Scrollbar decoration - floating hearts */
 .scrollbar-decoration {
     position: fixed;
     right: 10px;
@@ -981,7 +888,7 @@ h1 {
     width: 36px;
     height: 36px;
     z-index: 1000;
-    opacity: 0.7; /* Make it more visible by default */
+    opacity: 0.7;
     transition: opacity 0.3s ease;
     pointer-events: none;
 }
@@ -1032,16 +939,6 @@ body:hover .scrollbar-decoration {
     }
 }
 
-/* Fix for cat SVG animation */
-.cat-svg {
-    width: 200px;
-    height: auto;
-    filter: drop-shadow(0 5px 10px rgba(255, 107, 149, 0.3));
-    animation: bounce 3s ease-in-out infinite;
-    position: relative;
-    z-index: 2;
-}
-
 @keyframes bounce {
     0%, 100% {
         transform: translateY(0);
@@ -1051,87 +948,20 @@ body:hover .scrollbar-decoration {
     }
 }
 
-/* Remove toast notification styling */
 .toast {
-    display: none; /* Hide all toast notifications */
+    display: none;
 }
 
-/* Shake animation for max selection reached */
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
     20%, 60% { transform: translateX(-5px); }
     40%, 80% { transform: translateX(5px); }
 }
 
-.location-btn.shake {
+.custom-btn.shake {
     animation: shake 0.5s ease-in-out;
 }
 
-@media (max-width: 500px) {
-    /* ...existing mobile styles... */
-    
-    ::-webkit-scrollbar {
-        width: 8px; /* Smaller scrollbar for mobile */
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        border-width: 2px;
-    }
-    
-    .scrollbar-decoration {
-        right: 5px;
-        bottom: 5px;
-        width: 30px;
-        height: 30px;
-    }
-    
-    .scrollbar-heart {
-        width: 10px;
-        height: 10px;
-    }
-    
-    .nervous-cat {
-        transform: scale(0.5);
-        top: 5px;
-        left: 5px;
-    }
-    
-    @keyframes nervousShake {
-        0% { transform: scale(0.5) translateX(0) rotate(0deg); }
-        25% { transform: scale(0.5) translateX(-3px) rotate(-1deg); }
-        50% { transform: scale(0.5) translateX(0) rotate(1deg); }
-        75% { transform: scale(0.5) translateX(3px) rotate(-0.5deg); }
-        100% { transform: scale(0.5) translateX(0) rotate(0deg); }
-    }
-    
-    .sweat-drop {
-        transform-origin: center top;
-        transform: scale(0.7); /* Reduce the size of sweat drops on mobile */
-    }
-    
-    @keyframes sweatDrip {
-        0% {
-            transform: translateY(0) scale(0.2);
-            opacity: 0;
-        }
-        10% {
-            opacity: 0.9;
-            transform: translateY(0) scale(0.2);
-        }
-        70% {
-            transform: translateY(70px) scale(0.7);
-            opacity: 0.9;
-        }
-        100% {
-            transform: translateY(100px) scale(0.3);
-            opacity: 0;
-        }
-    }
-    
-    /* ...other existing mobile styles... */
-}
-
-/* Location counter badge */
 .location-counter {
     background: linear-gradient(45deg, #ff6b95, #ff8bb3);
     color: white;
@@ -1155,97 +985,6 @@ body:hover .scrollbar-decoration {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Modify location button styling for multiple select */
-.location-btn.selected {
-    position: relative;
-    background: linear-gradient(45deg, #ff6b95, #ff8bb3);
-    color: white;
-    border-color: transparent;
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(255, 107, 149, 0.3);
-}
-
-/* Add checkmark to selected locations */
-.location-btn.selected:after {
-    content: "✓";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 20px;
-    height: 20px;
-    background: white;
-    color: #ff6b95;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    animation: check-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes check-pop {
-    0% { transform: scale(0); }
-    70% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
-
-.dark-mode .location-btn.selected:after {
-    color: #ff6b95;
-    background: #fff;
-}
-
-/* Ensure inner elements with scrollbars get the same styling */
-* ::-webkit-scrollbar {
-    width: 10px; /* Slightly smaller for inner elements */
-    display: block; /* Always show scrollbars */
-}
-
-* ::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 4px 0;
-}
-
-* ::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #ffb6c1, #ff8bb3);
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    box-shadow: 0 0 5px rgba(255, 107, 149, 0.15);
-}
-
-* ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #ff6b95, #ffb6c1);
-    box-shadow: 0 0 8px rgba(255, 107, 149, 0.3);
-}
-
-.dark-mode * ::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #ff8bb3, #ff6b95);
-}
-
-.dark-mode * ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #ff6b95, #ff8bb3);
-    box-shadow: 0 0 12px rgba(255, 139, 179, 0.5);
-}
-
-@media (max-width: 500px) {
-    /* ...existing mobile styles... */
-
-    /* Maintain consistent scrollbar styling for mobile */
-    ::-webkit-scrollbar,
-    * ::-webkit-scrollbar {
-        width: 8px;
-    }
-    
-    ::-webkit-scrollbar-thumb,
-    * ::-webkit-scrollbar-thumb {
-        border-width: 2px;
-    }
-    
-    /* ...existing code... */
-}
-
 @keyframes wiggle {
     0%, 100% { transform: rotate(0); }
     25% { transform: rotate(-10deg); }
@@ -1258,7 +997,6 @@ body:hover .scrollbar-decoration {
     75% { transform: rotate(5deg); }
 }
 
-/* Style info icon in final message */
 .info-icon {
     cursor: help;
     display: inline-block;
@@ -1273,7 +1011,6 @@ body:hover .scrollbar-decoration {
     transform: scale(1.2);
 }
 
-/* Toast message for local storage info */
 .local-storage-info {
     background: rgba(255, 107, 149, 0.9);
     color: white;
@@ -1289,7 +1026,6 @@ body:hover .scrollbar-decoration {
     background: rgba(255, 139, 179, 0.9);
 }
 
-/* Clear data button styling */
 .clear-data-btn {
     background: none;
     border: 2px solid rgba(255, 107, 149, 0.5);
@@ -1318,7 +1054,6 @@ body:hover .scrollbar-decoration {
     box-shadow: 0 4px 8px rgba(255, 139, 179, 0.3);
 }
 
-/* Styling for clear data confirmation */
 .clear-data-confirmation {
     margin-top: 10px;
     color: #4CAF50;
@@ -1337,141 +1072,8 @@ body:hover .scrollbar-decoration {
     color: #8BC34A;
 }
 
-/* Food card styling */
 #food-card {
     max-width: 550px;
-}
-
-.food-btn .svg-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 32px;
-    margin-bottom: 8px;
-}
-
-.food-btn .svg-icon svg {
-    height: 32px;
-    width: auto;
-    fill: #ff6b95;
-    transition: fill 0.3s ease;
-}
-
-.dark-mode .food-btn .svg-icon svg {
-    fill: #ff8bb3;
-}
-
-.food-btn.selected .svg-icon svg {
-    fill: white;
-}
-
-.food-btn.selected .svg-icon svg .svg-brown,
-.food-btn.selected .svg-icon svg .svg-fries,
-.food-btn.selected .svg-icon svg .svg-fries-dark,
-.food-btn.selected .svg-icon svg .svg-burger,
-.food-btn.selected .svg-icon svg .svg-red,
-.food-btn.selected .svg-icon svg .svg-red-top,
-.food-btn.selected .svg-icon svg .svg-orange,
-.food-btn.selected .svg-icon svg .svg-burger-seeds {
-    fill: white;
-}
-
-/*
-.food-btn.selected .svg-icon svg .svg-dark-overlay {
-    fill: rgba(255, 255, 255, 0.3);
-}
-*/
-
-/* Enhanced food selection buttons with better visual feedback */
-.food-btn {
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow: hidden;
-    position: relative;
-}
-
-.food-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255, 107, 149, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all 0.4s ease-out;
-}
-
-.food-btn:hover::before {
-    opacity: 0.6;
-    transform: scale(1.2);
-}
-
-.food-btn.selected::before {
-    opacity: 0;
-}
-
-.food-btn.selected {
-    position: relative;
-    background: linear-gradient(45deg, #ff6b95, #ff8bb3);
-    color: white;
-    border-color: transparent;
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(255, 107, 149, 0.3);
-    animation: selected-pulse 2s infinite;
-}
-
-/* Add checkmark to selected food items */
-.food-btn.selected:after {
-    content: "✓";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 20px;
-    height: 20px;
-    background: white;
-    color: #ff6b95;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    animation: check-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.dark-mode .food-btn.selected:after {
-    color: #ff6b95;
-    background: #fff;
-}
-
-@keyframes selected-pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255, 107, 149, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(255, 107, 149, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 107, 149, 0); }
-}
-
-.dark-mode .food-btn.selected {
-    animation: selected-pulse-dark 2s infinite;
-}
-
-@keyframes selected-pulse-dark {
-    0% { box-shadow: 0 0 0 0 rgba(255, 139, 179, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(255, 139, 179, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 139, 179, 0); }
-}
-
-/* Food selection status indicator */
-.food-selection-status {
-    margin: 10px 0;
-    font-size: 14px;
-    color: #757575;
-    transition: all 0.3s ease;
-}
-
-.dark-mode .food-selection-status {
-    color: #aaa;
 }
 
 .final-message {
@@ -1490,7 +1092,6 @@ body:hover .scrollbar-decoration {
     opacity: 1;
 }
 
-/* Animation for the food card*/
 #food-next-btn {
     position: relative;
     overflow: hidden;
@@ -1517,31 +1118,6 @@ body:hover .scrollbar-decoration {
     }
 }
 
-/* Media queries for mobile */
-@media (max-width: 500px) {
-    .food-btn {
-        padding: 10px;
-    }
-    
-    .food-btn .svg-icon {
-        height: 24px;
-    }
-    
-    .food-btn .svg-icon svg {
-        height: 24px;
-    }
-    
-    .custom-food-container {
-        padding: 10px;
-    }
-    
-    .custom-food-badge {
-        font-size: 12px;
-        padding: 6px 10px 6px 12px;
-    }
-}
-
-/* Heart trail effect for mouse cursor */
 .heart-trail-container {
     position: fixed;
     top: 0;
@@ -1582,28 +1158,42 @@ body:hover .scrollbar-decoration {
     }
 }
 
-/* Drink selection styling */
 #drinks-card {
     position: relative;
 }
 
-.drink-btn {
+.custom-btn {
     position: relative;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    background-color: #f9f7f7;
+    color: #333;
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.drink-btn.selected {
-    position: relative;
-    background: linear-gradient(45deg, #ff6b95, #ff8bb3);
-    color: white;
-    border-color: transparent;
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(255, 107, 149, 0.3);
+.custom-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #fff9fa;
 }
 
-/* Add checkmark to selected drinks */
-.drink-btn.selected:after {
+.custom-btn.selected {
+    background-color: #ffe2e9;
+    border-color: #ff6b95;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 107, 149, 0.25);
+    animation: selected-pulse 1.5s infinite;
+}
+
+.custom-btn.selected:after {
     content: "✓";
     position: absolute;
     top: 10px;
@@ -1622,135 +1212,23 @@ body:hover .scrollbar-decoration {
     animation: check-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.dark-mode .drink-btn.selected:after {
-    color: #ff6b95;
-    background: #fff;
-}
-
-/* Drink selection status indicator */
-.drink-selection-status {
-    margin: 10px 0 15px;
-    padding: 8px 15px;
-    background: rgba(255, 107, 149, 0.1);
-    border-radius: 20px;
-    font-size: 14px;
-    color: #ff6b95;
-    display: inline-block;
-}
-
-.dark-mode .drink-selection-status {
-    background: rgba(255, 139, 179, 0.15);
-    color: #ff8bb3;
-}
-
-/* Enhanced food and drink selection styling */
-.food-btn, .drink-btn {
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-/* Normal state for food buttons */
-.food-btn {
-    background-color: #f9f7f7;
-    color: #333;
-}
-
-/* Selected state for food buttons */
-.food-btn.selected {
-    background-color: #ffe2e9;
-    border-color: #ff6b95;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(255, 107, 149, 0.2);
-}
-
-/* Normal state for drink buttons */
-.drink-btn {
-    background-color: #f7faff;
-    color: #333;
-}
-
-/* Selected state for drink buttons */
-.drink-btn.selected {
-    background-color: #ffe2e9;
-    border-color: #ff6b95;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(107, 181, 255, 0.2);
-}
-
-/* Dark mode styles for food and drink buttons */
-.dark-mode .food-btn {
+.dark-mode .custom-btn {
     background-color: #2a2329;
     color: #e6e6e6;
     border-color: #3d323a;
 }
 
-.dark-mode .drink-btn {
-    background-color: #232a33;
-    color: #e6e6e6;
-    border-color: #323a42;
-}
-
-.dark-mode .food-btn.selected {
-    background-color: #3c2a33;
-    border-color: #ff6b95;
-    box-shadow: 0 4px 12px rgba(255, 107, 149, 0.15);
-}
-
-.dark-mode .drink-btn.selected {
-    background-color: #2a3c4d;
-    border-color: #ff6b95;
-    box-shadow: 0 4px 12px rgba(107, 181, 255, 0.15);
-}
-
-/* Hover styles */
-.food-btn:hover, .drink-btn:hover {
-    transform: translateY(-1px);
-}
-
-.food-btn:hover {
-    background-color: #fff9fa;
-}
-
-.drink-btn:hover {
-    background-color: #f9fcff;
-}
-
-.dark-mode .food-btn:hover {
+.dark-mode .custom-btn:hover {
     background-color: #332830;
 }
 
-.dark-mode .drink-btn:hover {
-    background-color: #28323d;
+.dark-mode .custom-btn.selected {
+    background-color: #3c2a33;
+    border-color: #ff6b95;
+    box-shadow: 0 4px 12px rgba(255, 107, 149, 0.15);
+    animation: selected-pulse-dark 1.5s infinite;
 }
 
-/* Add visual indicator for selected buttons (checkmark) */
-.food-btn.selected:after, .drink-btn.selected:after {
-    content: "✓";
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    opacity: 0;
-    animation: fade-in 0.3s forwards;
-}
-
-.food-btn.selected:after {
-    color: #ff6b95;
-}
-
-.drink-btn.selected:after {
-    color: #ff6b95;
-}
-
-@keyframes fade-in {
-    0% { opacity: 0; transform: scale(0.5); }
-    100% { opacity: 1; transform: scale(1); }
-}
-
-/* Keep the existing selection animation but enhance it */
 @keyframes selected-pulse {
     0% { box-shadow: 0 0 0 0 rgba(255, 107, 149, 0.4); }
     70% { box-shadow: 0 0 0 10px rgba(255, 107, 149, 0); }
@@ -1758,157 +1236,17 @@ body:hover .scrollbar-decoration {
 }
 
 @keyframes selected-pulse-dark {
-    0% { box-shadow: 0 0 0 0 rgba(255, 107, 149, 0.2); }
-    70% { box-shadow: 0 0 0 10px rgba(255, 107, 149, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 107, 149, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(255, 139, 179, 0.2); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 139, 179, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 139, 179, 0); }
 }
 
-/* Custom styles for drink pulse animations */
-@keyframes selected-drink-pulse {
-    0% { box-shadow: 0 0 0 0 rgba(107, 181, 255, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(107, 181, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(107, 181, 255, 0); }
+@keyframes check-pop {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
 }
 
-@keyframes selected-drink-pulse-dark {
-    0% { box-shadow: 0 0 0 0 rgba(107, 181, 255, 0.2); }
-    70% { box-shadow: 0 0 0 10px rgba(107, 181, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(107, 181, 255, 0); }
-}
-
-.food-btn.selected {
-    animation: selected-pulse 1.5s infinite;
-}
-
-.drink-btn.selected {
-    animation: selected-drink-pulse 1.5s infinite;
-}
-
-.dark-mode .food-btn.selected {
-    animation: selected-pulse-dark 1.5s infinite;
-}
-
-.dark-mode .drink-btn.selected {
-    animation: selected-drink-pulse-dark 1.5s infinite;
-}
-
-/* Custom SVG icons color handling for selected state */
-.food-btn.selected .svg-icon svg path,
-.food-btn.selected .svg-icon svg rect,
-.food-btn.selected .svg-icon svg polygon {
-    fill: #ff6b95;
-}
-
-/* .drink-btn.selected .svg-icon svg path,
-.drink-btn.selected .svg-icon svg rect,
-.drink-btn.selected .svg-icon svg polygon {
-    fill: #e2f0ff;
-} */
-
-/* Improve accessibility - focus states */
-.food-btn:focus, .drink-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(255, 107, 149, 0.5);
-}
-
-.drink-btn:focus {
-    box-shadow: 0 0 0 2px rgba(107, 181, 255, 0.5);
-}
-
-.location-btn .location-icon {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.dark-mode .location-btn .location-icon {
-    fill: inherit;
-}
-
-/* Enhanced unified styling for location, food and drink buttons */
-.location-btn, .food-btn, .drink-btn {
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    background-color: #f9f7f7;
-    color: #333;
-    padding: 12px 15px;
-    margin: 8px;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.dark-mode .location-btn, .dark-mode .food-btn, .dark-mode .drink-btn {
-    background-color: #2a2329;
-    color: #e6e6e6;
-    border-color: #3d323a;
-}
-
-/* Normal state hover effects */
-.location-btn:hover, .food-btn:hover, .drink-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    background-color: #fff9fa;
-}
-
-.dark-mode .location-btn:hover, .dark-mode .food-btn:hover, .dark-mode .drink-btn:hover {
-    background-color: #332830;
-}
-
-/* Selected state for all buttons */
-.location-btn.selected, .food-btn.selected, .drink-btn.selected {
-    background-color: #ffe2e9;
-    border-color: #ff6b95;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(255, 107, 149, 0.25);
-}
-
-.dark-mode .location-btn.selected, .dark-mode .food-btn.selected, .dark-mode .drink-btn.selected {
-    background-color: #3c2a33;
-    border-color: #ff6b95;
-    box-shadow: 0 4px 12px rgba(255, 107, 149, 0.15);
-}
-
-/* Add checkmark for all selected buttons */
-.location-btn.selected:after, .food-btn.selected:after, .drink-btn.selected:after {
-    content: "✓";
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #ff6b95;
-    opacity: 0;
-    animation: fade-in 0.3s forwards;
-}
-
-/* Consistent animation for all buttons */
-@keyframes selected-pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255, 107, 149, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(255, 107, 149, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 107, 149, 0); }
-}
-
-.location-btn.selected, .food-btn.selected, .drink-btn.selected {
-    animation: selected-pulse 1.5s infinite;
-}
-
-.dark-mode .location-btn.selected, .dark-mode .food-btn.selected, .dark-mode .drink-btn.selected {
-    animation: selected-pulse-dark 1.5s infinite;
-}
-
-@keyframes selected-pulse-dark {
-    0% { box-shadow: 0 0 0 0 rgba(255, 107, 149, 0.2); }
-    70% { box-shadow: 0 0 0 10px rgba(255, 107, 149, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 107, 149, 0); }
-}
-
-/* Fix completion card to transition like other cards - consolidated version */
 #completion-card {
     position: fixed;
     top: 50%;
@@ -1937,28 +1275,6 @@ body:hover .scrollbar-decoration {
     overflow: hidden;
 }
 
-/* Fix for SVG borders and visibility when selected */
-.food-btn .svg-icon svg {
-    width: 36px;
-    height: 36px;
-    transition: all 0.3s ease;
-}
-
-/* Remove stroke for all drink buttons */
-.drink-btn .svg-icon svg {
-    stroke: none;
-}
-
-/* Fix the bun dau SVG */
-.food-btn[data-food="bun-bo"] .svg-icon svg {
-    stroke: none;
-}
-
-.food-btn[data-food="bun-bo"].selected .svg-icon svg {
-    stroke: none;
-}
-
-/* Fix for selection status messages */
 .food-selection-status, .drink-selection-status {
     margin: 15px 0;
     padding: 8px 15px;
@@ -1998,4 +1314,304 @@ body:hover .scrollbar-decoration {
 .dark-mode .drink-selection-status.active {
     background: rgba(139, 164, 255, 0.15);
     color: #8b93ff;
+}
+
+@media (max-width: 500px) {
+    ::-webkit-scrollbar,
+    * ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-thumb,
+    * ::-webkit-scrollbar-thumb {
+        border-width: 2px;
+    }
+
+    .scrollbar-decoration {
+        right: 5px;
+        bottom: 5px;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .scrollbar-heart {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .nervous-cat {
+        transform: scale(0.5);
+        top: 5px;
+        left: 5px;
+    }
+    
+    @keyframes nervousShake {
+        0% { transform: scale(0.5) translateX(0) rotate(0deg); }
+        25% { transform: scale(0.5) translateX(-3px) rotate(-1deg); }
+        50% { transform: scale(0.5) translateX(0) rotate(1deg); }
+        75% { transform: scale(0.5) translateX(3px) rotate(-0.5deg); }
+        100% { transform: scale(0.5) translateX(0) rotate(0deg); }
+    }
+}
+
+/* Main style for the new tile buttons */
+.tile-btn {
+    position: relative;
+    border: 3px solid transparent;
+    border-radius: 18px;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tile-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.tile-btn .tile-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 10px 10px 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.tile-btn:hover img {
+    transform: scale(1.1);
+}
+
+.tile-btn.selected {
+    border-color: #ff6b95;
+    box-shadow: 0 0 15px rgba(255, 107, 149, 0.5);
+}
+
+.dark-mode .tile-btn.selected {
+    border-color: #ff8bb3;
+    box-shadow: 0 0 15px rgba(255, 139, 179, 0.5);
+}
+
+/* The checkmark for the selected tile */
+.tile-btn.selected::after {
+    content: "✓";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    background: #ff6b95;
+    color: white;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: check-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes check-pop {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.custom-input-container {
+    margin: 15px 0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.custom-text-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid rgba(255, 182, 193, 0.5);
+    border-radius: 12px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    background: white;
+    color: #333;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+}
+
+.dark-mode .custom-text-input {
+    background: #1e1e1e;
+    border-color: rgba(255, 107, 149, 0.3);
+    color: #e6e6e6;
+}
+
+.custom-text-input:focus {
+    border-color: rgba(255, 107, 149, 0.8);
+    outline: none;
+    box-shadow: 0 4px 10px rgba(255, 107, 149, 0.2);
+}
+
+.word-counter {
+    font-size: 12px;
+    text-align: right;
+    color: #888;
+    margin-top: 5px;
+}
+
+.dark-mode .word-counter {
+    color: #aaa;
+}
+
+.note-container {
+    margin: 20px 0;
+}
+
+#note-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 15px;
+    border: 2px solid rgba(255, 182, 193, 0.5);
+    border-radius: 15px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    background: white;
+    color: #333;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.dark-mode #note-textarea {
+    background: #1e1e1e;
+    border-color: rgba(255, 107, 149, 0.3);
+    color: #e6e6e6;
+}
+
+#note-textarea:focus {
+    border-color: rgba(255, 107, 149, 0.8);
+    outline: none;
+    box-shadow: 0 4px 10px rgba(255, 107, 149, 0.2);
+}
+
+.note-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Email form styling */
+.email-container {
+    margin-top: 30px;
+    background: rgba(255, 107, 149, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .email-container {
+    background: rgba(255, 139, 179, 0.1);
+}
+
+.email-label {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.dark-mode .email-label {
+    color: #bbb;
+}
+
+.email-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#user-email {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid rgba(255, 182, 193, 0.5);
+    border-radius: 12px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    background: white;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.dark-mode #user-email {
+    background: #1e1e1e;
+    border-color: rgba(255, 107, 149, 0.3);
+    color: #e6e6e6;
+}
+
+#user-email:focus {
+    border-color: rgba(255, 107, 149, 0.8);
+    outline: none;
+    box-shadow: 0 4px 10px rgba(255, 107, 149, 0.2);
+}
+
+#user-email:invalid:not(:placeholder-shown) {
+    border-color: #ff3366;
+    animation: shake 0.3s;
+}
+
+#send-email-btn {
+    align-self: center;
+    margin-top: 10px;
+}
+
+.email-error {
+    color: #ff3366;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+
+.email-success {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 10px;
+    color: #4CAF50;
+    font-weight: 600;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.dark-mode .email-success {
+    background: rgba(76, 175, 80, 0.2);
+    color: #8BC34A;
+}
+
+.email-form.disabled input, 
+.email-form.disabled button {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.big-message {
+    font-size: 24px;
+    font-weight: 600;
+    color: #ff6b95;
+    margin: 15px 0;
+}
+
+.dark-mode .big-message {
+    color: #ff8bb3;
 }
