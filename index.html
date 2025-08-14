@@ -23,11 +23,7 @@
     <!-- Dark mode initialization -->
     <script>
         (function() {
-            const savedDarkMode = localStorage.getItem('darkMode');
-            if (savedDarkMode === 'enabled' || 
-                (savedDarkMode === null && 
-                 window.matchMedia && 
-                 window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.documentElement.classList.add('dark-mode');
             }
         })();
