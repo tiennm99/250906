@@ -9,8 +9,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const cherryBlossoms = document.getElementById('cherry-blossoms');
     const nervousCat = document.querySelector('.nervous-cat');
     const floatingHeartsContainer = document.getElementById('floating-hearts-container');
-    const perpetualHearts = document.getElementById('perpetual-hearts');
     const darkmodeToggle = document.getElementById('darkmode-toggle');
+
+    // Missing variable declarations - adding these fixes the continue buttons
+    let selectedLocations = [];
+    let selectedFoods = [];
+    let selectedDrinks = [];
+
+    // In-memory state variables
+    const appState = {
+        darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
+        selectedLocations: [],
+        dateOptions: [],
+        selectedFoods: [],
+        selectedDrinks: [],
+        userNote: '',
+        invitationEmailSent: false
+    };
 
     // Arrow pointers
     const yesArrow = document.getElementById('yes-arrow');
@@ -66,69 +81,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const emailError = document.getElementById('email-error');
     const emailSuccess = document.getElementById('email-success');
 
-    // Tracking selections
-    let selectedLocations = [];
-    let selectedFoods = [];
-    let selectedDrinks = [];
+    // Note card elements
+    const noteCard = document.getElementById('note-card');
+    const noteTextarea = document.getElementById('note-textarea');
+    const noteWordCounter = noteCard ? noteCard.querySelector('.word-counter') : null;
+    const saveNoteBtn = document.getElementById('save-note-btn');
 
     // Dark mode toggle
     if (darkmodeToggle) {
-        const savedDarkMode = localStorage.getItem('darkMode');
-
-        if (savedDarkMode === 'enabled') {
+        // Initialize based on system preference
+        if (appState.darkMode) {
             document.body.classList.add('dark-mode');
             darkmodeToggle.checked = true;
-        } else if (savedDarkMode === null) {
-            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (prefersDarkMode) {
-                document.body.classList.add('dark-mode');
-                darkmodeToggle.checked = true;
-            }
         }
 
         darkmodeToggle.addEventListener('change', function() {
             document.body.classList.toggle('dark-mode', this.checked);
-            if (this.checked) {
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
-            }
+            appState.darkMode = this.checked;
         });
 
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (localStorage.getItem('darkMode') === null) {
-                const systemPrefersDark = e.matches;
-                document.body.classList.toggle('dark-mode', systemPrefersDark);
-                darkmodeToggle.checked = systemPrefersDark;
-            }
+            const systemPrefersDark = e.matches;
+            document.body.classList.toggle('dark-mode', systemPrefersDark);
+            darkmodeToggle.checked = systemPrefersDark;
+            appState.darkMode = systemPrefersDark;
         });
     } else {
         console.warn('Dark mode toggle element not found');
-    }
-
-    // Start perpetual hearts animation
-    function startPerpetualHearts() {
-        perpetualHearts.style.display = 'block';
-
-        function createPerpetualHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('perpetual-heart');
-            heart.style.left = Math.random() * 100 + '%';
-            const size = Math.random() * 0.7 + 0.3;
-            const duration = Math.random() * 10 + 10;
-            heart.style.transform = `scale(${size})`;
-            heart.style.animationDuration = `${duration}s`;
-            perpetualHearts.appendChild(heart);
-            setTimeout(() => {
-                heart.remove();
-            }, duration * 1000);
-        }
-        for (let i = 0; i < 15; i++) {
-            setTimeout(() => {
-                createPerpetualHeart();
-            }, i * 300);
-        }
-        setInterval(createPerpetualHeart, 800);
     }
 
     // Create cherry blossoms
@@ -259,7 +238,6 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 mainCard.style.display = 'none';
                 successCard.style.display = 'block';
-                startPerpetualHearts();
                 setTimeout(() => {
                     successCard.classList.remove('hidden');
                     successCard.style.opacity = '1';
@@ -402,9 +380,200 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Tile buttons event listeners
+    const allTileButtons = document.querySelectorAll('.tile-btn');
+    if (allTileButtons && allTileButtons.length > 0) {
+        allTileButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const type = this.hasAttribute('data-location') ? 'location' : 
+                             this.hasAttribute('data-food') ? 'food' : 'drink';
+                const value = this.getAttribute(`data-${type}`);
+                
+                this.classList.toggle('selected');
+                
+                // Update the appropriate selection array
+                if (type === 'location') {
+                    if (this.classList.contains('selected')) {
+                        selectedLocations.push(value);
+                        createHeartBurst(this, 15);
+                    } else {
+                        selectedLocations = selectedLocations.filter(item => item !== value);
+                    }
+                    
+                    // Update UI based on selection
+                    if (selectedLocations.length > 0) {
+                        selectedLocationMessage.classList.remove('hidden');
+                        selectedLocationMessage.classList.add('show');
+                        confirmLocationBtn.style.display = 'inline-block';
+                        createButtonHeartEffect(confirmLocationBtn);
+                    } else {
+                        selectedLocationMessage.classList.remove('show');
+                        selectedLocationMessage.classList.add('hidden');
+                        confirmLocationBtn.style.display = 'none';
+                    }
+                } else if (type === 'food') {
+                    if (this.classList.contains('selected')) {
+                        selectedFoods.push(value);
+                        createHeartBurst(this, 15);
+                    } else {
+                        selectedFoods = selectedFoods.filter(item => item !== value);
+                    }
+                    updateFoodSelectionStatus();
+                    
+                    if (selectedFoods.length > 0) {
+                        selectedFoodMessage.classList.remove('hidden');
+                        selectedFoodMessage.classList.add('show');
+                        confirmFoodBtn.style.display = 'inline-block';
+                    } else {
+                        confirmFoodBtn.style.display = 'none';
+                        selectedFoodMessage.classList.remove('show');
+                        selectedFoodMessage.classList.add('hidden');
+                    }
+                } else if (type === 'drink') {
+                    if (this.classList.contains('selected')) {
+                        selectedDrinks.push(value);
+                        createHeartBurst(this, 15);
+                    } else {
+                        selectedDrinks = selectedDrinks.filter(item => item !== value);
+                    }
+                    updateDrinkSelectionStatus();
+                    
+                    if (selectedDrinks.length > 0) {
+                        confirmDrinkBtn.style.display = 'inline-block';
+                        selectedDrinkMessage.classList.remove('hidden');
+                        selectedDrinkMessage.classList.add('show');
+                    } else {
+                        confirmDrinkBtn.style.display = 'none';
+                        selectedDrinkMessage.classList.remove('show');
+                        selectedDrinkMessage.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    }
+
+    // Custom buttons event listeners
+    const customButtons = document.querySelectorAll('.custom-btn');
+    if (customButtons && customButtons.length > 0) {
+        customButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const buttonType = this.hasAttribute('data-location') ? 'location' : 
+                                  this.hasAttribute('data-food') ? 'food' : 'drink';
+                
+                this.classList.toggle('selected');
+                let inputContainer = document.getElementById(`${buttonType}-custom-input`);
+                if (!inputContainer) {
+                    const parentCard = this.closest('.card');
+                    inputContainer = document.createElement('div');
+                    inputContainer.id = `${buttonType}-custom-input`;
+                    inputContainer.className = 'custom-input-container';
+                    inputContainer.innerHTML = `
+                        <input type="text" class="custom-text-input" placeholder="Enter your custom ${buttonType} (max 10 words)" maxlength="70">
+                        <div class="word-counter">0/10 words</div>
+                    `;
+                    
+                    const confirmBtn = parentCard.querySelector(`#confirm-${buttonType}-btn`);
+                    if (confirmBtn) {
+                        confirmBtn.parentNode.insertBefore(inputContainer, confirmBtn);
+                    } else {
+                        const message = parentCard.querySelector(`.selected-location-message`);
+                        if (message) {
+                            message.parentNode.insertBefore(inputContainer, message);
+                        }
+                    }
+                    
+                    const input = inputContainer.querySelector('input');
+                    const counter = inputContainer.querySelector('.word-counter');
+                    
+                    input.addEventListener('input', function() {
+                        const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
+                        const wordCount = words.length;
+                        counter.textContent = `${wordCount}/10 words`;
+                        
+                        if (wordCount > 10) {
+                            this.value = words.slice(0, 10).join(' ');
+                            counter.textContent = "10/10 words";
+                        }
+                        
+                        if (buttonType === 'location') {
+                            selectedLocations = selectedLocations.filter(loc => loc !== 'custom');
+                            if (this.value.trim()) {
+                                selectedLocations.push('custom: ' + this.value.trim());
+                            }
+                        } else if (buttonType === 'food') {
+                            selectedFoods = selectedFoods.filter(food => !food.startsWith('custom:'));
+                            if (this.value.trim()) {
+                                selectedFoods.push('custom: ' + this.value.trim());
+                            }
+                        } else if (buttonType === 'drink') {
+                            selectedDrinks = selectedDrinks.filter(drink => !drink.startsWith('custom:'));
+                            if (this.value.trim()) {
+                                selectedDrinks.push('custom: ' + this.value.trim());
+                            }
+                        }
+                    });
+                }
+                
+                if (this.classList.contains('selected')) {
+                    inputContainer.style.display = 'block';
+                    inputContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        inputContainer.style.opacity = '1';
+                        inputContainer.style.transform = 'translateY(0)';
+                    }, 10);
+                    
+                    if (buttonType === 'location') {
+                        selectedLocationMessage.classList.remove('hidden');
+                        selectedLocationMessage.classList.add('show');
+                        confirmLocationBtn.style.display = 'inline-block';
+                    } else if (buttonType === 'food') {
+                        selectedFoodMessage.classList.remove('hidden');
+                        selectedFoodMessage.classList.add('show');
+                        confirmFoodBtn.style.display = 'inline-block';
+                    } else if (buttonType === 'drink') {
+                        selectedDrinkMessage.classList.remove('hidden');
+                        selectedDrinkMessage.classList.add('show');
+                        confirmDrinkBtn.style.display = 'inline-block';
+                    }
+                } else {
+                    inputContainer.style.opacity = '0';
+                    inputContainer.style.transform = 'translateY(10px)';
+                    setTimeout(() => {
+                        inputContainer.style.display = 'none';
+                    }, 300);
+                    
+                    if (buttonType === 'location') {
+                        selectedLocations = selectedLocations.filter(loc => !loc.startsWith('custom:'));
+                        if (selectedLocations.length === 0) {
+                            selectedLocationMessage.classList.remove('show');
+                            selectedLocationMessage.classList.add('hidden');
+                            confirmLocationBtn.style.display = 'none';
+                        }
+                    } else if (buttonType === 'food') {
+                        selectedFoods = selectedFoods.filter(food => !food.startsWith('custom:'));
+                        updateFoodSelectionStatus();
+                        if (selectedFoods.length === 0) {
+                            selectedFoodMessage.classList.remove('show');
+                            selectedFoodMessage.classList.add('hidden');
+                            confirmFoodBtn.style.display = 'none';
+                        }
+                    } else if (buttonType === 'drink') {
+                        selectedDrinks = selectedDrinks.filter(drink => !drink.startsWith('custom:'));
+                        updateDrinkSelectionStatus();
+                        if (selectedDrinks.length === 0) {
+                            selectedDrinkMessage.classList.remove('show');
+                            selectedDrinkMessage.classList.add('hidden');
+                            confirmDrinkBtn.style.display = 'none';
+                        }
+                    }
+                }
+            });
+        });
+    }
+
     confirmLocationBtn.addEventListener('click', function() {
         if (selectedLocations.length > 0) {
-            localStorage.setItem('selectedLocations', JSON.stringify(selectedLocations));
+            appState.selectedLocations = [...selectedLocations]; 
             for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
@@ -555,7 +724,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         if (isValid && dateOptions.length > 0) {
-            localStorage.setItem('dateOptions', JSON.stringify(dateOptions));
+            appState.dateOptions = [...dateOptions];
             confirmDatetimeBtn.style.display = 'none';
             selectedDatetimeMessage.classList.remove('hidden');
             selectedDatetimeMessage.classList.add('show');
@@ -621,34 +790,33 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Food next button not found in the DOM");
     }
 
-    if (foodButtons && foodButtons.length > 0) {
-        foodButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const food = this.dataset.food;
-                this.classList.toggle('selected');
-                if (this.classList.contains('selected')) {
-                    selectedFoods.push(food);
-                    createHeartBurst(this, 10);
-                } else {
-                    selectedFoods = selectedFoods.filter(item => item !== food);
-                }
-                if (selectedFoods.length > 0) {
-                    selectedFoodMessage.classList.remove('hidden');
-                    selectedFoodMessage.classList.add('show');
-                    confirmFoodBtn.style.display = 'inline-block';
-                } else {
-                    selectedFoodMessage.classList.remove('show');
-                    selectedFoodMessage.classList.add('hidden');
-                    confirmFoodBtn.style.display = 'none';
-                }
-                updateFoodSelectionStatus();
-            });
-        });
+    function updateFoodSelectionStatus() {
+        const statusContainer = document.getElementById('food-selection-status');
+        if (!statusContainer) return;
+        if (selectedFoods.length === 0) {
+            statusContainer.classList.remove('active');
+            statusContainer.innerHTML = '<p>Select your food preferences</p>';
+        } else {
+            statusContainer.classList.add('active');
+            statusContainer.innerHTML = `<p>${selectedFoods.length} option${selectedFoods.length > 1 ? 's' : ''} selected</p>`;
+        }
+    }
+
+    function updateDrinkSelectionStatus() {
+        const statusContainer = document.getElementById('drink-selection-status');
+        if (!statusContainer) return;
+        if (selectedDrinks.length === 0) {
+            statusContainer.classList.remove('active');
+            statusContainer.innerHTML = '<p>Select your drink preferences</p>';
+        } else {
+            statusContainer.classList.add('active');
+            statusContainer.innerHTML = `<p>${selectedDrinks.length} option${selectedDrinks.length > 1 ? 's' : ''} selected</p>`;
+        }
     }
 
     confirmFoodBtn.addEventListener('click', function() {
         if (selectedFoods.length > 0) {
-            localStorage.setItem('selectedFoods', JSON.stringify(selectedFoods));
+            appState.selectedFoods = [...selectedFoods];
             confirmFoodBtn.style.display = 'none';
             finalMessage.classList.remove('hidden');
             setTimeout(() => {
@@ -678,10 +846,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, duration * 1000);
                 }, i * 40);
             }
-            if (perpetualHearts && perpetualHearts.style.display !== 'block') {
-                startPerpetualHearts();
-            }
-            foodButtons.forEach(btn => {
+            const foodButtonsAll = document.querySelectorAll('.tile-btn[data-food], .custom-btn[data-food]');
+            foodButtonsAll.forEach(btn => {
                 btn.disabled = true;
                 btn.style.opacity = '0.7';
                 btn.style.cursor = 'default';
@@ -716,569 +882,97 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    drinkButtons.forEach(button => {
-        button.classList.remove('selected');
-        button.addEventListener('click', function() {
-            const selectedDrink = this.getAttribute('data-drink');
-            const isSelected = this.classList.contains('selected');
-            if (isSelected) {
-                this.classList.add('unselecting');
-                this.classList.remove('selected');
-                selectedDrinks = selectedDrinks.filter(drink => drink !== selectedDrink);
-                setTimeout(() => {
-                    this.classList.remove('unselecting');
-                }, 300);
-            } else {
-                this.classList.add('selecting');
-                this.classList.add('selected');
-                selectedDrinks.push(selectedDrink);
-                createHeartBurst(this, 5);
-                setTimeout(() => {
-                    this.classList.remove('selecting');
-                }, 300);
-            }
-            updateDrinkSelectionStatus();
-            if (selectedDrinks.length > 0) {
-                confirmDrinkBtn.style.display = 'inline-block';
-                selectedDrinkMessage.classList.remove('hidden');
-                selectedDrinkMessage.classList.add('show');
-            } else {
-                confirmDrinkBtn.style.display = 'none';
-                selectedDrinkMessage.classList.remove('show');
-                selectedDrinkMessage.classList.add('hidden');
-            }
-        });
-    });
-
-    if (confirmDrinkBtn) {
-        confirmDrinkBtn.addEventListener('click', function() {
-            if (selectedDrinks.length > 0) {
-                localStorage.setItem('selectedDrinks', JSON.stringify(selectedDrinks));
-                confirmDrinkBtn.style.display = 'none';
-                finalDrinkMessage.classList.remove('hidden');
-                setTimeout(() => {
-                    finalDrinkMessage.classList.add('show');
-                }, 50);
-                for (let i = 0; i < 30; i++) {
-                    setTimeout(() => {
-                        const heart = document.createElement('div');
-                        heart.classList.add('heart');
-                        heart.style.left = Math.random() * 100 + '%';
-                        heart.style.top = Math.random() * 100 + '%';
-                        heart.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
-                        heart.style.opacity = Math.random() * 0.5 + 0.5;
-                        drinksCelebration.appendChild(heart);
-                        setTimeout(() => {
-                            heart.remove();
-                        }, 1000);
-                    }, i * 100);
-                }
-                drinkButtons.forEach(btn => {
-                    btn.disabled = true;
-                    btn.style.opacity = '0.7';
-                    btn.style.cursor = 'default';
-                });
-            }
-        });
-    }
-
-    function celebrateSuccess() {
-        for (let i = 0; i < 100; i++) {
+    confirmDrinkBtn.addEventListener('click', function() {
+        if (selectedDrinks.length > 0) {
+            appState.selectedDrinks = [...selectedDrinks];
+            confirmDrinkBtn.style.display = 'none';
+            finalDrinkMessage.classList.remove('hidden');
             setTimeout(() => {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.top = Math.random() * 100 + '%';
-                heart.style.animationDuration = Math.random() * 2 + 2 + 's';
-                heart.style.opacity = Math.random() * 0.7 + 0.3;
-                heart.style.transform = `scale(${Math.random() * 0.8 + 0.5})`;
-                celebration.appendChild(heart);
+                finalDrinkMessage.classList.add('show');
+            }, 50);
+            for (let i = 0; i < 30; i++) {
                 setTimeout(() => {
-                    heart.remove();
-                }, 4000);
-            }, i * 40);
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.top = Math.random() * 100 + '%';
+                    heart.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
+                    heart.style.opacity = Math.random() * 0.5 + 0.5;
+                    drinksCelebration.appendChild(heart);
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 1000);
+                }, i * 100);
+            }
+            const drinkButtonsAll = document.querySelectorAll('.tile-btn[data-drink], .custom-btn[data-drink]');
+            drinkButtonsAll.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'default';
+            });
         }
-    }
-
-    noBtn.addEventListener('click', function() {
-        yesBtn.click();
     });
 
-    function createScrollbarDecoration() {
-        const scrollDecoration = document.createElement('div');
-        scrollDecoration.className = 'scrollbar-decoration';
-        for (let i = 1; i <= 3; i++) {
-            const heart = document.createElement('div');
-            heart.className = `scrollbar-heart scroll-h${i}`;
-            scrollDecoration.appendChild(heart);
-        }
-        document.body.appendChild(scrollDecoration);
-        function checkScrollable() {
-            const isBodyScrollable = document.body.scrollHeight > window.innerHeight;
-            const scrollableContainers = Array.from(document.querySelectorAll('.container')).filter(
-                el => el.scrollHeight > el.clientHeight
-            );
-            if (isBodyScrollable || scrollableContainers.length > 0) {
-                scrollDecoration.style.opacity = '0.7';
-            } else {
-                scrollDecoration.style.opacity = '0.4';
+    // Note textarea functionality
+    if (noteTextarea && noteWordCounter) {
+        noteTextarea.addEventListener('input', function() {
+            const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
+            const wordCount = words.length;
+            noteWordCounter.textContent = `${wordCount}/150 words`;
+            
+            if (wordCount > 150) {
+                this.value = words.slice(0, 150).join(' ');
+                noteWordCounter.textContent = "150/150 words";
             }
-        }
-        checkScrollable();
-        window.addEventListener('resize', checkScrollable);
-        document.addEventListener('scroll', function() {
-            scrollDecoration.style.opacity = '1';
-            clearTimeout(scrollDecoration.timeoutId);
-            scrollDecoration.timeoutId = setTimeout(() => {
-                checkScrollable();
-            }, 800);
-        }, true);
-        const observer = new MutationObserver(checkScrollable);
-        observer.observe(document.body, {
-            childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class']
         });
     }
 
-    createScrollbarDecoration();
-
-    const gorgeousText = document.querySelector('.gorgeous');
-    if (gorgeousText) {
-        gorgeousText.addEventListener('mouseover', function() {
-            this.style.animation = 'none';
-            setTimeout(() => {
-                this.style.animation = 'shimmer 2s linear infinite';
-            }, 10);
-        });
-    }
-
-    if (nervousCat) {
-        function addRandomSweatDrop() {
-            const sweatDrops = nervousCat.querySelector('.sweat-drops');
-            if (sweatDrops) {
-                const extraDrop = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-                extraDrop.classList.add('sweat-drop');
-                const baseX = 1650 + Math.random() * 400;
-                const baseY = 1750 + Math.random() * 200;
-                const radiusX = 15 + Math.random() * 15;
-                const radiusY = radiusX * 1.4;
-                extraDrop.setAttribute('cx', baseX.toString());
-                extraDrop.setAttribute('cy', baseY.toString());
-                extraDrop.setAttribute('rx', radiusX.toString());
-                extraDrop.setAttribute('ry', radiusY.toString());
-                extraDrop.setAttribute('fill', '#a3d9ff');
-                extraDrop.style.animationDelay = (Math.random() * 0.8) + 's';
-                sweatDrops.appendChild(extraDrop);
+    if (finalDrinkMessage) {
+        const oldCompletionNextBtn = document.getElementById('completion-next-btn');
+        
+        if (oldCompletionNextBtn) {
+            const noteNextBtn = document.createElement('button');
+            noteNextBtn.id = 'note-next-btn';
+            noteNextBtn.className = 'btn yes-btn';
+            noteNextBtn.style.marginTop = '15px';
+            noteNextBtn.style.display = 'inline-block';
+            noteNextBtn.textContent = 'Continue ♥';
+            
+            if (oldCompletionNextBtn.parentNode) {
+                oldCompletionNextBtn.parentNode.replaceChild(noteNextBtn, oldCompletionNextBtn);
+            }
+            
+            noteNextBtn.addEventListener('click', function() {
+                drinksCard.style.transform = 'scale(0.8)';
+                drinksCard.style.opacity = '0';
                 setTimeout(() => {
-                    extraDrop.remove();
-                }, 1500);
-            }
-        }
-        const sweatInterval = setInterval(addRandomSweatDrop, 300);
-        document.addEventListener('mousemove', function(e) {
-            nervousCat.style.animation = 'nervousShake 0.15s infinite';
-            if (Math.random() > 0.7) {
-                addRandomSweatDrop();
-            }
-            clearTimeout(nervousCat.timeoutId);
-            nervousCat.timeoutId = setTimeout(() => {
-                nervousCat.style.animation = 'nervousShake 0.3s infinite';
-            }, 500);
-        });
-        document.addEventListener('visibilitychange', function() {
-            if (document.visibilityState === 'hidden') {
-                clearInterval(sweatInterval);
-            }
-        });
-    }
-
-    window.addEventListener('beforeunload', function() {
-        localStorage.removeItem('selectedLocations');
-        localStorage.removeItem('dateOptions');
-        localStorage.removeItem('selectedFoods');
-    });
-
-    document.querySelectorAll('.location-btn.selected').forEach(button => {
-        if (!button.getAttribute('data-manually-selected')) {
-            button.classList.remove('selected');
-        }
-    });
-
-    function updateLocationCounter() {}
-
-    const heartTrailContainer = document.createElement('div');
-    heartTrailContainer.className = 'heart-trail-container';
-    document.body.appendChild(heartTrailContainer);
-    let mouseX = 0;
-    let mouseY = 0;
-    document.addEventListener('mousemove', function(e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        if (Math.random() > 0.7) {
-            createHeartAtCursor();
-        }
-    });
-
-    function createHeartAtCursor() {
-        const heart = document.createElement('div');
-        heart.className = 'cursor-heart';
-        heart.style.left = mouseX + 'px';
-        heart.style.top = mouseY + 'px';
-        const size = Math.random() * 15 + 8;
-        const opacity = Math.random() * 0.5 + 0.5;
-        const randomX = (Math.random() * 2 - 1);
-        heart.style.setProperty('--random-x', randomX);
-        heart.style.width = size + 'px';
-        heart.style.height = size + 'px';
-        heart.style.opacity = opacity;
-        heartTrailContainer.appendChild(heart);
-        setTimeout(() => {
-            heart.remove();
-        }, 1500);
-    }
-
-    function updateFoodSelectionStatus() {
-        const statusContainer = document.getElementById('food-selection-status');
-        if (!statusContainer) return;
-        if (selectedFoods.length === 0) {
-            statusContainer.classList.remove('active');
-            statusContainer.innerHTML = '<p>Select your food preferences</p>';
-        } else {
-            statusContainer.classList.add('active');
-            statusContainer.innerHTML = `<p>${selectedFoods.length} option${selectedFoods.length > 1 ? 's' : ''} selected</p>`;
-        }
-    }
-
-    function updateDrinkSelectionStatus() {
-        const statusContainer = document.getElementById('drink-selection-status');
-        if (!statusContainer) return;
-        if (selectedDrinks.length === 0) {
-            statusContainer.classList.remove('active');
-            statusContainer.innerHTML = '<p>Select your drink preferences</p>';
-        } else {
-            statusContainer.classList.add('active');
-            statusContainer.innerHTML = `<p>${selectedDrinks.length} option${selectedDrinks.length > 1 ? 's' : ''} selected</p>`;
-        }
-    }
-
-    if (foodButtons && foodButtons.length > 0) {
-        foodButtons.forEach(button => {
-            button.classList.remove('selected');
-            button.addEventListener('click', function() {
-                const selectedFood = this.getAttribute('data-food');
-                const isSelected = this.classList.contains('selected');
-                if (isSelected) {
-                    this.classList.remove('selected');
-                    selectedFoods = selectedFoods.filter(food => food !== selectedFood);
-                } else {
-                    this.classList.add('selected');
-                    selectedFoods.push(selectedFood);
-                    createHeartBurst(this, 15);
-                }
-                if (selectedFoods.length > 0) {
-                    confirmFoodBtn.style.display = 'inline-block';
-                    selectedFoodMessage.classList.remove('hidden');
-                    selectedFoodMessage.classList.add('show');
-                } else {
-                    confirmFoodBtn.style.display = 'none';
-                    selectedFoodMessage.classList.remove('show');
-                    selectedFoodMessage.classList.add('hidden');
-                }
-                updateFoodSelectionStatus();
-            });
-        });
-    }
-
-    if (drinkButtons && drinkButtons.length > 0) {
-        drinkButtons.forEach(button => {
-            button.classList.remove('selected');
-            button.addEventListener('click', function() {
-                const selectedDrink = this.getAttribute('data-drink');
-                const isSelected = this.classList.contains('selected');
-                if (isSelected) {
-                    this.classList.remove('selected');
-                    selectedDrinks = selectedDrinks.filter(drink => drink !== selectedDrink);
-                } else {
-                    this.classList.add('selected');
-                    selectedDrinks.push(selectedDrink);
-                    createHeartBurst(this, 15);
-                }
-                if (selectedDrinks.length > 0) {
-                    confirmDrinkBtn.style.display = 'inline-block';
-                    selectedDrinkMessage.classList.remove('hidden');
-                    selectedDrinkMessage.classList.add('show');
-                } else {
-                    confirmDrinkBtn.style.display = 'none';
-                    selectedDrinkMessage.classList.remove('show');
-                    selectedDrinkMessage.classList.add('hidden');
-                }
-                updateDrinkSelectionStatus();
-            });
-        });
-    }
-
-    if (foodCard) updateFoodSelectionStatus();
-    if (drinksCard) updateDrinkSelectionStatus();
-
-    const allTileButtons = document.querySelectorAll('.tile-btn');
-    if (allTileButtons && allTileButtons.length > 0) {
-        allTileButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const type = this.hasAttribute('data-location') ? 'location' : 
-                             this.hasAttribute('data-food') ? 'food' : 'drink';
-                const value = this.getAttribute(`data-${type}`);
-                
-                this.classList.toggle('selected');
-                
-                // Update the appropriate selection array
-                if (type === 'location') {
-                    if (this.classList.contains('selected')) {
-                        selectedLocations.push(value);
-                        createHeartBurst(this, 15);
-                    } else {
-                        selectedLocations = selectedLocations.filter(item => item !== value);
-                    }
-                    
-                    // Update UI based on selection
-                    if (selectedLocations.length > 0) {
-                        selectedLocationMessage.classList.remove('hidden');
-                        selectedLocationMessage.classList.add('show');
-                        confirmLocationBtn.style.display = 'inline-block';
-                        createButtonHeartEffect(confirmLocationBtn);
-                    } else {
-                        selectedLocationMessage.classList.remove('show');
-                        selectedLocationMessage.classList.add('hidden');
-                        confirmLocationBtn.style.display = 'none';
-                    }
-                } else if (type === 'food') {
-                    if (this.classList.contains('selected')) {
-                        selectedFoods.push(value);
-                        createHeartBurst(this, 15);
-                    } else {
-                        selectedFoods = selectedFoods.filter(item => item !== value);
-                    }
-                    updateFoodSelectionStatus();
-                    
-                    if (selectedFoods.length > 0) {
-                        confirmFoodBtn.style.display = 'inline-block';
-                        selectedFoodMessage.classList.remove('hidden');
-                        selectedFoodMessage.classList.add('show');
-                    } else {
-                        confirmFoodBtn.style.display = 'none';
-                        selectedFoodMessage.classList.remove('show');
-                        selectedFoodMessage.classList.add('hidden');
-                    }
-                } else if (type === 'drink') {
-                    if (this.classList.contains('selected')) {
-                        selectedDrinks.push(value);
-                        createHeartBurst(this, 15);
-                    } else {
-                        selectedDrinks = selectedDrinks.filter(item => item !== value);
-                    }
-                    updateDrinkSelectionStatus();
-                    
-                    if (selectedDrinks.length > 0) {
-                        confirmDrinkBtn.style.display = 'inline-block';
-                        selectedDrinkMessage.classList.remove('hidden');
-                        selectedDrinkMessage.classList.add('show');
-                    } else {
-                        confirmDrinkBtn.style.display = 'none';
-                        selectedDrinkMessage.classList.remove('show');
-                        selectedDrinkMessage.classList.add('hidden');
-                    }
-                }
-            });
-        });
-    }
-
-    const customButtons = document.querySelectorAll('.custom-btn');
-    if (customButtons && customButtons.length > 0) {
-        customButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const buttonType = this.hasAttribute('data-location') ? 'location' : 
-                                  this.hasAttribute('data-food') ? 'food' : 'drink';
-                
-                this.classList.toggle('selected');
-                let inputContainer = document.getElementById(`${buttonType}-custom-input`);
-                if (!inputContainer) {
-                    const parentCard = this.closest('.card');
-                    inputContainer = document.createElement('div');
-                    inputContainer.id = `${buttonType}-custom-input`;
-                    inputContainer.className = 'custom-input-container';
-                    inputContainer.innerHTML = `
-                        <input type="text" class="custom-text-input" placeholder="Enter your custom ${buttonType} (max 10 words)" maxlength="70">
-                        <div class="word-counter">0/10 words</div>
-                    `;
-                    
-                    const confirmBtn = parentCard.querySelector(`#confirm-${buttonType}-btn`);
-                    if (confirmBtn) {
-                        confirmBtn.parentNode.insertBefore(inputContainer, confirmBtn);
-                    } else {
-                        const message = parentCard.querySelector(`.selected-location-message`);
-                        if (message) {
-                            message.parentNode.insertBefore(inputContainer, message);
-                        }
-                    }
-                    
-                    const input = inputContainer.querySelector('input');
-                    const counter = inputContainer.querySelector('.word-counter');
-                    
-                    input.addEventListener('input', function() {
-                        const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
-                        const wordCount = words.length;
-                        counter.textContent = `${wordCount}/10 words`;
-                        
-                        if (wordCount > 10) {
-                            this.value = words.slice(0, 10).join(' ');
-                            counter.textContent = "10/10 words";
-                        }
-                        
-                        if (buttonType === 'location') {
-                            selectedLocations = selectedLocations.filter(loc => loc !== 'custom');
-                            if (this.value.trim()) {
-                                selectedLocations.push('custom: ' + this.value.trim());
-                            }
-                        } else if (buttonType === 'food') {
-                            selectedFoods = selectedFoods.filter(food => !food.startsWith('custom:'));
-                            if (this.value.trim()) {
-                                selectedFoods.push('custom: ' + this.value.trim());
-                            }
-                        } else if (buttonType === 'drink') {
-                            selectedDrinks = selectedDrinks.filter(drink => !drink.startsWith('custom:'));
-                            if (this.value.trim()) {
-                                selectedDrinks.push('custom: ' + this.value.trim());
-                            }
-                        }
-                    });
-                }
-                
-                if (this.classList.contains('selected')) {
-                    inputContainer.style.display = 'block';
-                    inputContainer.style.opacity = '0';
+                    drinksCard.style.display = 'none';
+                    noteCard.style.display = 'block';
                     setTimeout(() => {
-                        inputContainer.style.opacity = '1';
-                        inputContainer.style.transform = 'translateY(0)';
-                    }, 10);
-                    
-                    if (buttonType === 'location') {
-                        selectedLocationMessage.classList.remove('hidden');
-                        selectedLocationMessage.classList.add('show');
-                        confirmLocationBtn.style.display = 'inline-block';
-                    } else if (buttonType === 'food') {
-                        selectedFoodMessage.classList.remove('hidden');
-                        selectedFoodMessage.classList.add('show');
-                        confirmFoodBtn.style.display = 'inline-block';
-                    } else if (buttonType === 'drink') {
-                        selectedDrinkMessage.classList.remove('hidden');
-                        selectedDrinkMessage.classList.add('show');
-                        confirmDrinkBtn.style.display = 'inline-block';
-                    }
-                } else {
-                    inputContainer.style.opacity = '0';
-                    inputContainer.style.transform = 'translateY(10px)';
-                    setTimeout(() => {
-                        inputContainer.style.display = 'none';
-                    }, 300);
-                    
-                    if (buttonType === 'location') {
-                        selectedLocations = selectedLocations.filter(loc => !loc.startsWith('custom:'));
-                        if (selectedLocations.length === 0) {
-                            selectedLocationMessage.classList.remove('show');
-                            selectedLocationMessage.classList.add('hidden');
-                            confirmLocationBtn.style.display = 'none';
+                        noteCard.classList.remove('hidden');
+                        noteCard.style.opacity = '1';
+                        noteCard.style.transform = 'scale(1)';
+                        for (let i = 0; i < 15; i++) {
+                            setTimeout(() => {
+                                createHeart(document.getElementById('note-celebration'));
+                            }, i * 100);
                         }
-                    } else if (buttonType === 'food') {
-                        selectedFoods = selectedFoods.filter(food => !food.startsWith('custom:'));
-                        updateFoodSelectionStatus();
-                        if (selectedFoods.length === 0) {
-                            selectedFoodMessage.classList.remove('show');
-                            selectedFoodMessage.classList.add('hidden');
-                            confirmFoodBtn.style.display = 'none';
-                        }
-                    } else if (buttonType === 'drink') {
-                        selectedDrinks = selectedDrinks.filter(drink => !drink.startsWith('custom:'));
-                        updateDrinkSelectionStatus();
-                        if (selectedDrinks.length === 0) {
-                            selectedDrinkMessage.classList.remove('show');
-                            selectedDrinkMessage.classList.add('hidden');
-                            confirmDrinkBtn.style.display = 'none';
-                        }
-                    }
-                }
+                    }, 50);
+                }, 500);
             });
-        });
+        }
     }
 
-	const noteCard = document.getElementById('note-card');
-	const noteTextarea = document.getElementById('note-textarea');
-	const noteWordCounter = noteCard ? noteCard.querySelector('.word-counter') : null;
-	// const skipNoteBtn = document.getElementById('skip-note-btn');
-	const saveNoteBtn = document.getElementById('save-note-btn');
-
-	if (noteTextarea && noteWordCounter) {
-		noteTextarea.addEventListener('input', function() {
-			const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
-			const wordCount = words.length;
-			noteWordCounter.textContent = `${wordCount}/150 words`;
-			
-			if (wordCount > 150) {
-				this.value = words.slice(0, 150).join(' ');
-				noteWordCounter.textContent = "150/150 words";
-			}
-		});
-	}
-
-	if (finalDrinkMessage) {
-		const oldCompletionNextBtn = document.getElementById('completion-next-btn');
-		
-		if (oldCompletionNextBtn) {
-			const noteNextBtn = document.createElement('button');
-			noteNextBtn.id = 'note-next-btn';
-			noteNextBtn.className = 'btn yes-btn';
-			noteNextBtn.style.marginTop = '15px';
-			noteNextBtn.style.display = 'inline-block';
-			noteNextBtn.textContent = 'Continue ♥';
-			
-			if (oldCompletionNextBtn.parentNode) {
-				oldCompletionNextBtn.parentNode.replaceChild(noteNextBtn, oldCompletionNextBtn);
-			}
-			
-			noteNextBtn.addEventListener('click', function() {
-				drinksCard.style.transform = 'scale(0.8)';
-				drinksCard.style.opacity = '0';
-				setTimeout(() => {
-					drinksCard.style.display = 'none';
-					noteCard.style.display = 'block';
-					setTimeout(() => {
-						noteCard.classList.remove('hidden');
-						noteCard.style.opacity = '1';
-						noteCard.style.transform = 'scale(1)';
-						for (let i = 0; i < 15; i++) {
-							setTimeout(() => {
-								createHeart(document.getElementById('note-celebration'));
-							}, i * 100);
-						}
-					}, 50);
-				}, 500);
-			});
-		}
-	}
-
-	// if (skipNoteBtn) {
-	// 	skipNoteBtn.addEventListener('click', function() {
-	// 		showCompletionCard();
-	// 	});
-	// }
-
-	if (saveNoteBtn) {
-		saveNoteBtn.addEventListener('click', function() {
-			const noteText = noteTextarea.value.trim();
-			if (noteText) {
-				localStorage.setItem('userNote', noteText);
-			}
-			
-			showCompletionCard();
-		});
-	}
+    if (saveNoteBtn) {
+        saveNoteBtn.addEventListener('click', function() {
+            const noteText = noteTextarea.value.trim();
+            if (noteText) {
+                appState.userNote = noteText;
+            }
+            
+            showCompletionCard();
+        });
+    }
     
     // Email validation and sending
     if (emailForm) {
@@ -1298,25 +992,14 @@ document.addEventListener('DOMContentLoaded', function() {
             sendEmailBtn.textContent = "Sending...";
             sendEmailBtn.disabled = true;
             
-            // Get info from localStorage
-            const dateOptions = localStorage.getItem('dateOptions') ? 
-                JSON.parse(localStorage.getItem('dateOptions')) : [];
-            const selectedLocations = localStorage.getItem('selectedLocations') ? 
-                JSON.parse(localStorage.getItem('selectedLocations')) : [];
-            const selectedFoods = localStorage.getItem('selectedFoods') ? 
-                JSON.parse(localStorage.getItem('selectedFoods')) : [];
-            const selectedDrinks = localStorage.getItem('selectedDrinks') ? 
-                JSON.parse(localStorage.getItem('selectedDrinks')) : [];
-            const userNote = localStorage.getItem('userNote') || '';
-            
-            // Prepare template parameters
+            // Use in-memory state for data
             const templateParams = {
                 to_email: email,
-                date_options: dateOptions.map(opt => `${opt.date} at ${opt.time}`).join(', '),
-                locations: selectedLocations.join(', '),
-                food_preferences: selectedFoods.join(', '),
-                drink_preferences: selectedDrinks.join(', '),
-                user_note: userNote
+                date_options: appState.dateOptions.map(opt => `${opt.date} at ${opt.time}`).join(', '),
+                locations: appState.selectedLocations.join(', '),
+                food_preferences: appState.selectedFoods.join(', '),
+                drink_preferences: appState.selectedDrinks.join(', '),
+                user_note: appState.userNote
             };
             
             // Send email using EmailJS
@@ -1328,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     emailForm.classList.add('disabled');
                     emailSuccess.style.display = 'block';
                     
-                    localStorage.setItem('invitationEmailSent', 'true');
+                    appState.invitationEmailSent = true;
                     
                     for (let i = 0; i < 20; i++) {
                         setTimeout(() => {
@@ -1362,7 +1045,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Check if email was already sent
-        if (localStorage.getItem('invitationEmailSent') === 'true') {
+        if (appState.invitationEmailSent) {
             emailForm.classList.add('disabled');
             emailSuccess.style.display = 'block';
             userEmailInput.disabled = true;
@@ -1387,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // Check if email was already sent
-                if (localStorage.getItem('invitationEmailSent') === 'true') {
+                if (appState.invitationEmailSent) {
                     const emailForm = document.getElementById('email-form');
                     const emailSuccess = document.getElementById('email-success');
                     if (emailForm && emailSuccess) {
@@ -1399,5 +1082,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }, 50);
         }, 500);
+    }
+    
+    // Heart trail effect on mouse movement
+    const heartTrailContainer = document.createElement('div');
+    heartTrailContainer.className = 'heart-trail-container';
+    document.body.appendChild(heartTrailContainer);
+    let mouseX = 0;
+    let mouseY = 0;
+    document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (Math.random() > 0.7) {
+            createHeartAtCursor();
+        }
+    });
+
+    function createHeartAtCursor() {
+        const heart = document.createElement('div');
+        heart.className = 'cursor-heart';
+        heart.style.left = mouseX + 'px';
+        heart.style.top = mouseY + 'px';
+        const size = Math.random() * 15 + 8;
+        const opacity = Math.random() * 0.5 + 0.5;
+        const randomX = (Math.random() * 2 - 1);
+        heart.style.setProperty('--random-x', randomX);
+        heart.style.width = size + 'px';
+        heart.style.height = size + 'px';
+        heart.style.opacity = opacity;
+        heartTrailContainer.appendChild(heart);
+        setTimeout(() => {
+            heart.remove();
+        }, 1500);
     }
 });
