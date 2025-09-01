@@ -24,7 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedFoods: [],
         selectedDrinks: [],
         userNote: '',
-        invitationEmailSent: false
+        invitationEmailSent: false,
+        detailQueue: [],
+        currentDetailIndex: 0
     };
 
     // Arrow pointers
@@ -386,9 +388,29 @@ document.addEventListener('DOMContentLoaded', function() {
     if (allTileButtons && allTileButtons.length > 0) {
         allTileButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const type = this.hasAttribute('data-location') ? 'location' :
-                             this.hasAttribute('data-food') ? 'food' : 'drink';
-                const value = this.getAttribute(`data-${type}`);
+                let type, value;
+                if (this.hasAttribute('data-location')) {
+                    type = 'location';
+                    value = this.getAttribute('data-location');
+                } else if (this.hasAttribute('data-food')) {
+                    type = 'food';
+                    value = this.getAttribute('data-food');
+                } else if (this.hasAttribute('data-drink')) {
+                    type = 'drink';
+                    value = this.getAttribute('data-drink');
+                } else if (this.hasAttribute('data-movie')) {
+                    type = 'movie';
+                    value = this.getAttribute('data-movie');
+                } else if (this.hasAttribute('data-activity')) {
+                    type = 'activity';
+                    value = this.getAttribute('data-activity');
+                } else if (this.hasAttribute('data-mall')) {
+                    type = 'mall';
+                    value = this.getAttribute('data-mall');
+                } else if (this.hasAttribute('data-area')) {
+                    type = 'area';
+                    value = this.getAttribute('data-area');
+                }
 
                 this.classList.toggle('selected');
 
@@ -447,6 +469,42 @@ document.addEventListener('DOMContentLoaded', function() {
                         confirmDrinkBtn.style.display = 'none';
                         selectedDrinkMessage.classList.remove('show');
                         selectedDrinkMessage.classList.add('hidden');
+                    }
+                } else if (type === 'movie') {
+                    createHeartBurst(this, 15);
+                    const movieMessage = document.getElementById('selected-movie-message');
+                    const confirmMovieBtn = document.getElementById('confirm-movie-btn');
+                    if (movieMessage && confirmMovieBtn) {
+                        movieMessage.classList.remove('hidden');
+                        movieMessage.classList.add('show');
+                        confirmMovieBtn.style.display = 'inline-block';
+                    }
+                } else if (type === 'activity') {
+                    createHeartBurst(this, 15);
+                    const activityMessage = document.getElementById('selected-activity-message');
+                    const confirmActivityBtn = document.getElementById('confirm-activity-btn');
+                    if (activityMessage && confirmActivityBtn) {
+                        activityMessage.classList.remove('hidden');
+                        activityMessage.classList.add('show');
+                        confirmActivityBtn.style.display = 'inline-block';
+                    }
+                } else if (type === 'mall') {
+                    createHeartBurst(this, 15);
+                    const mallMessage = document.getElementById('selected-mall-message');
+                    const confirmMallBtn = document.getElementById('confirm-mall-btn');
+                    if (mallMessage && confirmMallBtn) {
+                        mallMessage.classList.remove('hidden');
+                        mallMessage.classList.add('show');
+                        confirmMallBtn.style.display = 'inline-block';
+                    }
+                } else if (type === 'area') {
+                    createHeartBurst(this, 15);
+                    const areaMessage = document.getElementById('selected-area-message');
+                    const confirmAreaBtn = document.getElementById('confirm-area-btn');
+                    if (areaMessage && confirmAreaBtn) {
+                        areaMessage.classList.remove('hidden');
+                        areaMessage.classList.add('show');
+                        confirmAreaBtn.style.display = 'inline-block';
                     }
                 }
             });
@@ -604,18 +662,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 locationCard.style.opacity = '0';
                 setTimeout(() => {
                     locationCard.style.display = 'none';
-                    initializeDatetimeRow(datetimeRowTemplate);
-                    datetimeCard.style.display = 'block';
-                    setTimeout(() => {
-                        datetimeCard.classList.remove('hidden');
-                        datetimeCard.style.opacity = '1';
-                        datetimeCard.style.transform = 'scale(1)';
-                        for (let i = 0; i < 15; i++) {
-                            setTimeout(() => {
-                                createHeart(document.getElementById('datetime-celebration'));
-                            }, i * 100);
-                        }
-                    }, 50);
+                    showNextCardBasedOnLocation();
                 }, 500);
             }, 1200);
         }
@@ -635,24 +682,123 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 4000);
     }
 
+    // Function to determine next card based on selected locations
+    function showNextCardBasedOnLocation() {
+        // Always go to time selection first, regardless of location
+        initializeDatetimeRow(datetimeRowTemplate);
+        showCard('datetime-card', 'datetime-celebration');
+    }
+
+    // Function to show plan/details after time selection
+    function showPlanDetailsBasedOnLocation() {
+        // Build queue based on the correct order: cafe → restaurant → cinema → park → mall → around city
+        const detailQueue = [];
+        
+        // Add pages in the correct priority order from the original page
+        if (selectedLocations.includes('cafe')) {
+            detailQueue.push('drinks-card'); // Cafe shows drinks selection
+        }
+        if (selectedLocations.includes('restaurant')) {
+            detailQueue.push('food-card'); // Restaurant shows food selection
+        }
+        if (selectedLocations.includes('cinema')) {
+            detailQueue.push('cinema-card');
+        }
+        if (selectedLocations.includes('park')) {
+            detailQueue.push('park-card');
+        }
+        if (selectedLocations.includes('mall')) {
+            detailQueue.push('mall-card');
+        }
+        if (selectedLocations.includes('around-city')) {
+            detailQueue.push('area-card');
+        }
+        if (selectedLocations.includes('somewhere-else') || selectedLocations.some(loc => loc.startsWith('custom:'))) {
+            detailQueue.push('custom-plan-card');
+        }
+        
+        // Store the queue for later use
+        appState.detailQueue = detailQueue;
+        appState.currentDetailIndex = 0;
+        
+        if (detailQueue.length > 0) {
+            // Show first detail page
+            const firstDetailCard = detailQueue[0];
+            const celebrationId = firstDetailCard.replace('-card', '-celebration');
+            hideCardAndShowNext('datetime-card', firstDetailCard, celebrationId);
+        } else {
+            // No detail pages, go to note
+            hideCardAndShowNext('datetime-card', 'note-card', 'note-celebration');
+        }
+    }
+
+    // Function to show next detail page or move to note
+    function showNextDetailOrContinue(currentCard) {
+        if (appState.detailQueue && appState.currentDetailIndex < appState.detailQueue.length - 1) {
+            // Show next detail page
+            appState.currentDetailIndex++;
+            const nextDetailCard = appState.detailQueue[appState.currentDetailIndex];
+            const celebrationId = nextDetailCard.replace('-card', '-celebration');
+            hideCardAndShowNext(currentCard, nextDetailCard, celebrationId);
+        } else {
+            // No more detail pages, go to note
+            hideCardAndShowNext(currentCard, 'note-card', 'note-celebration');
+        }
+    }
+
+    // Function to show food/drinks after plan/details
+    function showFoodDrinksBasedOnLocation(currentCard = 'datetime-card') {
+        const hasRestaurant = selectedLocations.includes('restaurant');
+        const hasCafe = selectedLocations.includes('cafe');
+        
+        if (hasRestaurant) {
+            hideCardAndShowNext(currentCard, 'food-card', 'food-celebration');
+        } else if (hasCafe) {
+            hideCardAndShowNext(currentCard, 'drinks-card', 'drinks-celebration');
+        } else {
+            // For other locations, skip to note
+            hideCardAndShowNext(currentCard, 'note-card', 'note-celebration');
+        }
+    }
+
+    // Generic function to show a card with animation
+    function showCard(cardId, celebrationId) {
+        const card = document.getElementById(cardId);
+        const celebration = document.getElementById(celebrationId);
+        
+        card.style.display = 'block';
+        setTimeout(() => {
+            card.classList.remove('hidden');
+            card.style.opacity = '1';
+            card.style.transform = 'scale(1)';
+            if (celebration) {
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(() => {
+                        createHeart(celebration);
+                    }, i * 100);
+                }
+            }
+        }, 50);
+    }
+
+    // Generic function to hide a card and show the next one
+    function hideCardAndShowNext(currentCardId, nextCardId, nextCelebrationId) {
+        const currentCard = document.getElementById(currentCardId);
+        
+        currentCard.style.transform = 'scale(0.8)';
+        currentCard.style.opacity = '0';
+        setTimeout(() => {
+            currentCard.style.display = 'none';
+            if (nextCardId === 'datetime-card') {
+                initializeDatetimeRow(datetimeRowTemplate);
+            }
+            showCard(nextCardId, nextCelebrationId);
+        }, 500);
+    }
+
     function initializeDatetimeRow(row) {
         try {
-            const datePicker = row.querySelector('.date-picker');
-            if (datePicker) {
-                flatpickr(datePicker, {
-                    dateFormat: "M d, Y", minDate: "today", disableMobile: true,
-                    theme: "date-theme", animate: true, position: "auto center",
-                    onOpen: function() {
-                        const calendar = document.querySelector('.flatpickr-calendar');
-                        if (calendar) {
-                            calendar.style.animation = 'none';
-                            setTimeout(() => {
-                                calendar.style.animation = 'calendar-pop 0.3s ease-out';
-                            }, 10);
-                        }
-                    }
-                });
-            }
+            // Date is now fixed, no need for date picker
             const timePicker = row.querySelector('.time-picker');
             if (timePicker) {
                 flatpickr(timePicker, {
@@ -703,25 +849,17 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmDatetimeBtn.addEventListener('click', function() {
         let isValid = true;
         const dateOptions = [];
+        const fixedDate = "06/09/2025"; // Fixed date
         datetimeContainer.querySelectorAll('.datetime-row').forEach(row => {
-            const date = row.querySelector('.date-picker').value;
             const time = row.querySelector('.time-picker').value;
-            if (!date || !time) {
+            if (!time) {
                 isValid = false;
-                if (!date) {
-                    row.querySelector('.date-picker').style.borderColor = '#ff3366';
-                    setTimeout(() => {
-                        row.querySelector('.date-picker').style.borderColor = '';
-                    }, 1000);
-                }
-                if (!time) {
-                    row.querySelector('.time-picker').style.borderColor = '#ff3366';
-                    setTimeout(() => {
-                        row.querySelector('.time-picker').style.borderColor = '';
-                    }, 1000);
-                }
+                row.querySelector('.time-picker').style.borderColor = '#ff3366';
+                setTimeout(() => {
+                    row.querySelector('.time-picker').style.borderColor = '';
+                }, 1000);
             } else {
-                dateOptions.push({ date, time });
+                dateOptions.push({ date: fixedDate, time });
             }
         });
         if (isValid && dateOptions.length > 0) {
@@ -768,24 +906,71 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Event listeners for new confirm buttons
+    const confirmMovieBtn = document.getElementById('confirm-movie-btn');
+    const confirmActivityBtn = document.getElementById('confirm-activity-btn');
+    const confirmMallBtn = document.getElementById('confirm-mall-btn');
+    const confirmAreaBtn = document.getElementById('confirm-area-btn');
+    const savePlanBtn = document.getElementById('save-plan-btn');
+
+    if (confirmMovieBtn) {
+        confirmMovieBtn.addEventListener('click', function() {
+            // After movie selection, show next detail page or go to food/drinks
+            showNextDetailOrContinue('cinema-card');
+        });
+    }
+
+    if (confirmActivityBtn) {
+        confirmActivityBtn.addEventListener('click', function() {
+            // After activity selection, show next detail page or go to food/drinks
+            showNextDetailOrContinue('park-card');
+        });
+    }
+
+    if (confirmMallBtn) {
+        confirmMallBtn.addEventListener('click', function() {
+            // After mall selection, show next detail page or go to food/drinks
+            showNextDetailOrContinue('mall-card');
+        });
+    }
+
+    if (confirmAreaBtn) {
+        confirmAreaBtn.addEventListener('click', function() {
+            // After area selection, show next detail page or go to food/drinks
+            showNextDetailOrContinue('area-card');
+        });
+    }
+
+    if (savePlanBtn) {
+        const customPlanTextarea = document.getElementById('custom-plan-textarea');
+        const customPlanWordCounter = document.querySelector('#custom-plan-card .word-counter');
+        
+        if (customPlanTextarea && customPlanWordCounter) {
+            customPlanTextarea.addEventListener('input', function() {
+                const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
+                const wordCount = words.length;
+                customPlanWordCounter.textContent = `${wordCount}/200 words`;
+                
+                if (wordCount > 200) {
+                    this.value = words.slice(0, 200).join(' ');
+                    customPlanWordCounter.textContent = "200/200 words";
+                }
+            });
+        }
+        
+        savePlanBtn.addEventListener('click', function() {
+            if (customPlanTextarea) {
+                appState.customPlan = customPlanTextarea.value.trim();
+            }
+            // After custom plan, show next detail page or go to food/drinks
+            showNextDetailOrContinue('custom-plan-card');
+        });
+    }
+
     if (foodNextBtn) {
         foodNextBtn.addEventListener('click', function() {
-            datetimeCard.style.transform = 'scale(0.8)';
-            datetimeCard.style.opacity = '0';
-            setTimeout(() => {
-                datetimeCard.style.display = 'none';
-                foodCard.style.display = 'block';
-                setTimeout(() => {
-                    foodCard.classList.remove('hidden');
-                    foodCard.style.opacity = '1';
-                    foodCard.style.transform = 'scale(1)';
-                    for (let i = 0; i < 15; i++) {
-                        setTimeout(() => {
-                            createHeart(document.getElementById('food-celebration'));
-                        }, i * 100);
-                    }
-                }, 50);
-            }, 500);
+            // After time selection, go to plan/details based on location
+            showPlanDetailsBasedOnLocation();
         });
     } else {
         console.error("Food next button not found in the DOM");
@@ -864,22 +1049,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (drinksNextBtn) {
         drinksNextBtn.addEventListener('click', function() {
-            foodCard.style.transform = 'scale(0.8)';
-            foodCard.style.opacity = '0';
-            setTimeout(() => {
-                foodCard.style.display = 'none';
-                drinksCard.style.display = 'block';
-                setTimeout(() => {
-                    drinksCard.classList.remove('hidden');
-                    drinksCard.style.opacity = '1';
-                    drinksCard.style.transform = 'scale(1)';
-                    for (let i = 0; i < 15; i++) {
-                        setTimeout(() => {
-                            createHeart(document.getElementById('drinks-celebration'));
-                        }, i * 100);
-                    }
-                }, 50);
-            }, 500);
+            // After food selection, show next detail page or go to note
+            showNextDetailOrContinue('food-card');
         });
     }
 
@@ -944,22 +1115,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             noteNextBtn.addEventListener('click', function() {
-                drinksCard.style.transform = 'scale(0.8)';
-                drinksCard.style.opacity = '0';
-                setTimeout(() => {
-                    drinksCard.style.display = 'none';
-                    noteCard.style.display = 'block';
-                    setTimeout(() => {
-                        noteCard.classList.remove('hidden');
-                        noteCard.style.opacity = '1';
-                        noteCard.style.transform = 'scale(1)';
-                        for (let i = 0; i < 15; i++) {
-                            setTimeout(() => {
-                                createHeart(document.getElementById('note-celebration'));
-                            }, i * 100);
-                        }
-                    }, 50);
-                }, 500);
+                // After drinks selection, show next detail page or go to note
+                showNextDetailOrContinue('drinks-card');
             });
         }
     }

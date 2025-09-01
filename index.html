@@ -152,7 +152,7 @@
                 <h1>Yayyy!!! 🌸</h1>
                 <div class="sakura-divider"></div>
                 <p>So excited to see you!!!</p>
-                <p class="message">I'll make it special, I promise! </p>
+                <p class="message">I'll try my best!</p>
                 <div class="cute-animation">
                     <!-- Cat with heart SVG -->
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -240,7 +240,7 @@
                     </div>
                 </div>
                 <div class="next-step">
-                    <button id="choose-location-btn" class="btn yes-btn">Let's choose a place ♥</button>
+                    <button id="choose-location-btn" class="btn yes-btn">Let's make a plan ♥</button>
                 </div>
             </div>
         </div>
@@ -293,14 +293,14 @@
         <div class="card hidden" id="datetime-card">
             <div class="hearts-celebration" id="datetime-celebration"></div>
             <div class="card-content">
-                <h1>Pick a <span class="special-text">when</span>...</h1>
+                <h1>Pick a <span class="special-text">time</span>...</h1>
                 <div class="sakura-divider"></div>
-                <p class="question">What time would work for you?</p>
+                <p class="question">What time on <strong>06/09/2025</strong> works for you?</p>
                 <div class="datetime-container">
                     <div class="datetime-row" id="datetime-row-template">
-                        <div class="date-input">
+                        <div class="date-display">
                             <label>Date</label>
-                            <input type="text" class="date-picker" placeholder="Select a date" readonly>
+                            <div class="fixed-date">06/09/2025</div>
                         </div>
                         <div class="time-input">
                             <label>Time</label>
@@ -321,6 +321,167 @@
                 <div class="selected-datetime-message hidden" id="selected-datetime-message">
                     <p class="message">Perfect time! 💕</p>
                     <button id="food-next-btn" class="btn yes-btn" style="margin-top: 15px; display: inline-block;">Let's Pick Some Food ♥</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cinema Movie Selection -->
+        <div class="card hidden" id="cinema-card">
+            <div class="hearts-celebration" id="cinema-celebration"></div>
+            <div class="card-content">
+                <h1>Pick a <span class="special-text">movie</span>...</h1>
+                <div class="sakura-divider"></div>
+                <p class="question">What would you like to watch?</p>
+                <div class="location-options">
+                    <button class="tile-btn" data-movie="action">
+                        <img src="images/places/cinema.jfif" alt="Action Movies">
+                        <span class="tile-label">Action</span>
+                    </button>
+                    <button class="tile-btn" data-movie="romance">
+                        <img src="images/places/cinema.jfif" alt="Romance Movies">
+                        <span class="tile-label">Romance</span>
+                    </button>
+                    <button class="tile-btn" data-movie="comedy">
+                        <img src="images/places/cinema.jfif" alt="Comedy Movies">
+                        <span class="tile-label">Comedy</span>
+                    </button>
+                    <button class="tile-btn" data-movie="horror">
+                        <img src="images/places/cinema.jfif" alt="Horror Movies">
+                        <span class="tile-label">Horror</span>
+                    </button>
+                    <button class="custom-btn" data-movie="custom">
+                        <span class="custom-icon">🎬</span>
+                        <span><strong>Other Genre</strong></span>
+                    </button>
+                </div>
+                <div class="selected-location-message hidden" id="selected-movie-message">
+                    <p class="message">Great choice! 🎬</p>
+                </div>
+                <button id="confirm-movie-btn" class="btn yes-btn">Continue ♥</button>
+            </div>
+        </div>
+
+        <!-- Park Activities Selection -->
+        <div class="card hidden" id="park-card">
+            <div class="hearts-celebration" id="park-celebration"></div>
+            <div class="card-content">
+                <h1>Park <span class="special-text">activities</span>...</h1>
+                <div class="sakura-divider"></div>
+                <p class="question">What would you like to do?</p>
+                <div class="location-options">
+                    <button class="tile-btn" data-activity="walk">
+                        <img src="images/places/park.jpg" alt="Walking">
+                        <span class="tile-label">Walking</span>
+                    </button>
+                    <button class="tile-btn" data-activity="picnic">
+                        <img src="images/places/park.jpg" alt="Picnic">
+                        <span class="tile-label">Picnic</span>
+                    </button>
+                    <button class="tile-btn" data-activity="cycling">
+                        <img src="images/places/park.jpg" alt="Cycling">
+                        <span class="tile-label">Cycling</span>
+                    </button>
+                    <button class="tile-btn" data-activity="photography">
+                        <img src="images/places/park.jpg" alt="Photography">
+                        <span class="tile-label">Photography</span>
+                    </button>
+                    <button class="custom-btn" data-activity="custom">
+                        <span class="custom-icon">🌳</span>
+                        <span><strong>Other Activity</strong></span>
+                    </button>
+                </div>
+                <div class="selected-location-message hidden" id="selected-activity-message">
+                    <p class="message">Sounds fun! 🌳</p>
+                </div>
+                <button id="confirm-activity-btn" class="btn yes-btn">Continue ♥</button>
+            </div>
+        </div>
+
+        <!-- Mall Selection -->
+        <div class="card hidden" id="mall-card">
+            <div class="hearts-celebration" id="mall-celebration"></div>
+            <div class="card-content">
+                <h1>Which <span class="special-text">mall</span>?</h1>
+                <div class="sakura-divider"></div>
+                <p class="question">Where would you like to go shopping?</p>
+                <div class="location-options">
+                    <button class="tile-btn" data-mall="vincom">
+                        <img src="images/places/mall.jfif" alt="Vincom Center">
+                        <span class="tile-label">Vincom Center</span>
+                    </button>
+                    <button class="tile-btn" data-mall="lotte">
+                        <img src="images/places/mall.jfif" alt="Lotte Center">
+                        <span class="tile-label">Lotte Center</span>
+                    </button>
+                    <button class="tile-btn" data-mall="diamond">
+                        <img src="images/places/mall.jfif" alt="Diamond Plaza">
+                        <span class="tile-label">Diamond Plaza</span>
+                    </button>
+                    <button class="tile-btn" data-mall="saigon">
+                        <img src="images/places/mall.jfif" alt="Saigon Centre">
+                        <span class="tile-label">Saigon Centre</span>
+                    </button>
+                    <button class="custom-btn" data-mall="custom">
+                        <span class="custom-icon">🛍️</span>
+                        <span><strong>Other Mall</strong></span>
+                    </button>
+                </div>
+                <div class="selected-location-message hidden" id="selected-mall-message">
+                    <p class="message">Perfect choice! 🛍️</p>
+                </div>
+                <button id="confirm-mall-btn" class="btn yes-btn">Continue ♥</button>
+            </div>
+        </div>
+
+        <!-- City Area Selection -->
+        <div class="card hidden" id="area-card">
+            <div class="hearts-celebration" id="area-celebration"></div>
+            <div class="card-content">
+                <h1>Which <span class="special-text">area</span>?</h1>
+                <div class="sakura-divider"></div>
+                <p class="question">Where in the city would you like to explore?</p>
+                <div class="location-options">
+                    <button class="tile-btn" data-area="district1">
+                        <img src="images/places/around-the-city.jpg" alt="District 1">
+                        <span class="tile-label">District 1</span>
+                    </button>
+                    <button class="tile-btn" data-area="district3">
+                        <img src="images/places/around-the-city.jpg" alt="District 3">
+                        <span class="tile-label">District 3</span>
+                    </button>
+                    <button class="tile-btn" data-area="district7">
+                        <img src="images/places/around-the-city.jpg" alt="District 7">
+                        <span class="tile-label">District 7</span>
+                    </button>
+                    <button class="tile-btn" data-area="thuduc">
+                        <img src="images/places/around-the-city.jpg" alt="Thu Duc City">
+                        <span class="tile-label">Thu Duc City</span>
+                    </button>
+                    <button class="custom-btn" data-area="custom">
+                        <span class="custom-icon">🏙️</span>
+                        <span><strong>Other Area</strong></span>
+                    </button>
+                </div>
+                <div class="selected-location-message hidden" id="selected-area-message">
+                    <p class="message">Great area! 🏙️</p>
+                </div>
+                <button id="confirm-area-btn" class="btn yes-btn">Continue ♥</button>
+            </div>
+        </div>
+
+        <!-- Custom Plan Page -->
+        <div class="card hidden" id="custom-plan-card">
+            <div class="hearts-celebration" id="custom-plan-celebration"></div>
+            <div class="card-content">
+                <h1>Tell me your <span class="special-text">plan</span>...</h1>
+                <div class="sakura-divider"></div>
+                <p class="question">What do you have in mind? 💭</p>
+                <div class="note-container">
+                    <textarea id="custom-plan-textarea" placeholder="Share your ideas here... (max 200 words)" maxlength="1500"></textarea>
+                    <div class="word-counter">0/200 words</div>
+                </div>
+                <div class="note-actions">
+                    <button id="save-plan-btn" class="btn yes-btn">Continue ♥</button>
                 </div>
             </div>
         </div>
@@ -437,7 +598,7 @@
                 <div class="sakura-divider"></div>
                 <div class="celebration-icon">🎉</div>
                 <p class="big-message">Can't wait to see you!</p>
-                <p class="message">Our date will be perfectly set.</p>
+                <p class="message">I'll prepare for our date.</p>
                 <p class="message">I'll make it special to the best of my ability.</p>
 
                 <!-- Email subscription form -->
@@ -466,7 +627,7 @@
     </div>
 
     <audio id="bg-music" loop>
-        <source src="music/Perfect_Ed-Sheeran.mp3" type="audio/mpeg">
+        <source src="music/Sugar.mp3" type="audio/mpeg">
     </audio>
 
     <script src="script.js"></script>
