@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Send NO button click tracking
-        sendToWorker(`❌ User clicked NO button (attempt #${noButtonClickCount})`);
+        // sendToWorker(`❌ User clicked NO button (attempt #${noButtonClickCount})`);
         if (nervousCat) {
             nervousCat.style.animation = 'nervousShake 0.1s infinite';
         }
@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const input = inputContainer.querySelector('input');
                     const counter = inputContainer.querySelector('.word-counter');
 
-                    input.addEventListener('input', function() {
+                    input.addEventListener('change', function() {
                         const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
                         const wordCount = words.length;
                         counter.textContent = `${wordCount}/10 words`;
@@ -628,42 +628,42 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (this.value.trim()) {
                                 selectedLocations.push('custom: ' + this.value.trim());
                                 // Send tracking for custom location
-                                sendToWorker(`🏢 User entered custom location: "${this.value.trim()}"`);
+                                // sendToWorker(`🏢 User entered custom location: "${this.value.trim()}"`);
                             }
                         } else if (buttonType === 'food') {
                             selectedFoods = selectedFoods.filter(food => !food.startsWith('custom:'));
                             if (this.value.trim()) {
                                 selectedFoods.push('custom: ' + this.value.trim());
                                 // Send tracking for custom food
-                                sendToWorker(`🍴 User entered custom food: "${this.value.trim()}"`);
+                                // sendToWorker(`🍴 User entered custom food: "${this.value.trim()}"`);
                             }
                         } else if (buttonType === 'drink') {
                             selectedDrinks = selectedDrinks.filter(drink => !drink.startsWith('custom:'));
                             if (this.value.trim()) {
                                 selectedDrinks.push('custom: ' + this.value.trim());
                                 // Send tracking for custom drink
-                                sendToWorker(`🍹 User entered custom drink: "${this.value.trim()}"`);
+                                // sendToWorker(`🍹 User entered custom drink: "${this.value.trim()}"`);
                             }
                         } else if (buttonType === 'movie') {
                             // Store custom movie in appState or global variable
                             appState.selectedMovie = this.value.trim() ? `custom: ${this.value.trim()}` : null;
                             if (this.value.trim()) {
                                 // Send tracking for custom movie
-                                sendToWorker(`🎬 User entered custom movie: "${this.value.trim()}"`);
+                                // sendToWorker(`🎬 User entered custom movie: "${this.value.trim()}"`);
                             }
                         } else if (buttonType === 'activity') {
                             // Store custom activity in appState
                             appState.selectedActivity = this.value.trim() ? `custom: ${this.value.trim()}` : null;
                             if (this.value.trim()) {
                                 // Send tracking for custom activity
-                                sendToWorker(`🏃 User entered custom activity: "${this.value.trim()}"`);
+                                // sendToWorker(`🏃 User entered custom activity: "${this.value.trim()}"`);
                             }
                         } else if (buttonType === 'mall') {
                             // Store custom mall in appState
                             appState.selectedMall = this.value.trim() ? `custom: ${this.value.trim()}` : null;
                             if (this.value.trim()) {
                                 // Send tracking for custom mall
-                                sendToWorker(`🏬 User entered custom mall: "${this.value.trim()}"`);
+                                // sendToWorker(`🏬 User entered custom mall: "${this.value.trim()}"`);
                             }
                         }
                     });
