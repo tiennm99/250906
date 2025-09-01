@@ -249,7 +249,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         successArrow.classList.remove('hidden');
                         successArrow.style.opacity = '1';
                     }
-                    celebrateSuccess();
+                    // Create celebration hearts
+                    for (let i = 0; i < 15; i++) {
+                        setTimeout(() => {
+                            createHeart(document.getElementById('celebration'));
+                        }, i * 100);
+                    }
                 }, 50);
             }, 500);
         }, 300);
@@ -816,35 +821,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            const removeBtn = row.querySelector('.remove-datetime');
-            if (removeBtn) {
-                removeBtn.addEventListener('click', function() {
-                    if (datetimeContainer.children.length > 1) {
-                        row.style.opacity = '0';
-                        row.style.height = '0';
-                        row.style.marginBottom = '0';
-                        row.style.overflow = 'hidden';
-                        setTimeout(() => {
-                            row.remove();
-                        }, 300);
-                    }
-                });
-            }
+            // Remove button functionality removed - single time input only
+            // const removeBtn = row.querySelector('.remove-datetime');
+            // if (removeBtn) {
+            //     removeBtn.addEventListener('click', function() {
+            //         if (datetimeContainer.children.length > 1) {
+            //             row.style.opacity = '0';
+            //             row.style.height = '0';
+            //             row.style.marginBottom = '0';
+            //             row.style.overflow = 'hidden';
+            //             setTimeout(() => {
+            //                 row.remove();
+            //             }, 300);
+            //         }
+            //     });
+            // }
         } catch (error) {
             console.error("Error initializing datetime row:", error);
         }
     }
 
-    addDatetimeBtn.addEventListener('click', function() {
-        const newRow = datetimeRowTemplate.cloneNode(true);
-        newRow.id = '';
-        datetimeContainer.appendChild(newRow);
-        initializeDatetimeRow(newRow);
-        newRow.style.opacity = '0';
-        setTimeout(() => {
-            newRow.style.opacity = '1';
-        }, 10);
-    });
+    // addDatetimeBtn removed - no longer needed
+    // addDatetimeBtn.addEventListener('click', function() {
+    //     const newRow = datetimeRowTemplate.cloneNode(true);
+    //     newRow.id = '';
+    //     datetimeContainer.appendChild(newRow);
+    //     initializeDatetimeRow(newRow);
+    //     newRow.style.opacity = '0';
+    //     setTimeout(() => {
+    //         newRow.style.opacity = '1';
+    //     }, 10);
+    // });
 
     confirmDatetimeBtn.addEventListener('click', function() {
         let isValid = true;
@@ -894,11 +901,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, duration * 1000);
                 }, i * 40);
             }
-            addDatetimeBtn.disabled = true;
-            datetimeContainer.querySelectorAll('.remove-datetime').forEach(btn => {
-                btn.disabled = true;
-                btn.style.opacity = 0.5;
-            });
+            // addDatetimeBtn.disabled = true; // Button removed
+            // Remove buttons no longer exist
+            // datetimeContainer.querySelectorAll('.remove-datetime').forEach(btn => {
+            //     btn.disabled = true;
+            //     btn.style.opacity = 0.5;
+            // });
             datetimeContainer.querySelectorAll('input').forEach(input => {
                 input.disabled = true;
                 input.style.opacity = 0.7;
