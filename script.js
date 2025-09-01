@@ -6,6 +6,30 @@ document.addEventListener('DOMContentLoaded', function() {
             console.warn('Missing image:', this.src);
         });
     });
+
+    // Cloudflare Worker integration
+    const WORKER_URL = 'https://mitigram.miti99.workers.dev/';
+    let noButtonClickCount = 0;
+
+    // Function to send data to Cloudflare Worker
+    async function sendToWorker(message) {
+        try {
+            await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    text: message
+                })
+            });
+        } catch (error) {
+            console.warn('Failed to send to worker:', error);
+        }
+    }
+
+    // Send page access notification
+    sendToWorker('🎯 New user accessed the dating app!');
     // Main UI elements
     const yesBtn = document.getElementById('yes-btn');
     const noBtn = document.getElementById('no-btn');
@@ -168,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(createRandomHeart, 500);
 
     // Handle NO button clicks
-    let noBtnClickCount = 0;
+    // Removed - using global noButtonClickCount instead
     const noBtnResponses = [
         "Aww, 🌙! 🥺", "🌙, you shine so bright! ✨", "Oh my moon 🌙, why so distant? 😊", "🌙, you're my moonlight! 🌟",
         "Don't make me feel blue, 🌙! 😳", "If the moon isn't full, is 🌙's heart full? 💖", "🌙, don't leave me mooning over you! 🥰",
@@ -195,19 +219,26 @@ document.addEventListener('DOMContentLoaded', function() {
         noBtn.style.position = 'fixed';
         noBtn.style.left = randomX + 'px';
         noBtn.style.top = randomY + 'px';
-        if (noBtnClickCount < noBtnResponses.length) {
-            noBtn.innerHTML = `<b>${noBtnResponses[noBtnClickCount]}</b>`;
-            noBtnClickCount++;
+        if (noButtonClickCount < noBtnResponses.length) {
+            noBtn.innerHTML = `<b>${noBtnResponses[noButtonClickCount]}</b>`;
+            noButtonClickCount++;
         } else {
+            noButtonClickCount++;
             const randomIndex = Math.floor(Math.random() * noBtnResponses.length);
             noBtn.innerHTML = `<b>${noBtnResponses[randomIndex]}</b>`;
         }
+        
+        // Send NO button click tracking
+        sendToWorker(`❌ User clicked NO button (attempt #${noButtonClickCount})`);
         if (nervousCat) {
             nervousCat.style.animation = 'nervousShake 0.1s infinite';
         }
     });
 
     yesBtn.addEventListener('click', function() {
+        // Send stage progression tracking
+        sendToWorker(`✅ User clicked YES! Moving to success stage. (NO attempts: ${noButtonClickCount})`);
+        
         if (yesArrow) {
             yesArrow.style.opacity = '0';
             yesArrow.style.transform = 'translateY(-50px)';
@@ -491,6 +522,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.querySelectorAll('[data-movie]').forEach(btn => btn.classList.remove('selected'));
                     this.classList.add('selected');
                     
+                    // Store and track movie selection
+                    appState.selectedMovie = value;
+                    sendToWorker(`🎬 User selected movie: "${value}"`);
+                    
                     createHeartBurst(this, 15);
                     const movieMessage = document.getElementById('selected-movie-message');
                     const confirmMovieBtn = document.getElementById('confirm-movie-btn');
@@ -505,6 +540,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.querySelectorAll('[data-activity]').forEach(btn => btn.classList.remove('selected'));
                     this.classList.add('selected');
                     
+                    // Store and track activity selection
+                    appState.selectedActivity = value;
+                    sendToWorker(`🏃 User selected activity: "${value}"`);
+                    
                     createHeartBurst(this, 15);
                     const activityMessage = document.getElementById('selected-activity-message');
                     const confirmActivityBtn = document.getElementById('confirm-activity-btn');
@@ -518,6 +557,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Single choice - remove previous selection and select this one
                     document.querySelectorAll('[data-mall]').forEach(btn => btn.classList.remove('selected'));
                     this.classList.add('selected');
+                    
+                    // Store and track mall selection
+                    appState.selectedMall = value;
+                    sendToWorker(`🏬 User selected mall: "${value}"`);
                     
                     createHeartBurst(this, 15);
                     const mallMessage = document.getElementById('selected-mall-message');
@@ -539,7 +582,11 @@ document.addEventListener('DOMContentLoaded', function() {
         customButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const buttonType = this.hasAttribute('data-location') ? 'location' :
-                                  this.hasAttribute('data-food') ? 'food' : 'drink';
+                                  this.hasAttribute('data-food') ? 'food' :
+                                  this.hasAttribute('data-drink') ? 'drink' :
+                                  this.hasAttribute('data-movie') ? 'movie' :
+                                  this.hasAttribute('data-activity') ? 'activity' :
+                                  this.hasAttribute('data-mall') ? 'mall' : 'unknown';
 
                 this.classList.toggle('selected');
                 let inputContainer = document.getElementById(`${buttonType}-custom-input`);
@@ -580,16 +627,43 @@ document.addEventListener('DOMContentLoaded', function() {
                             selectedLocations = selectedLocations.filter(loc => loc !== 'custom');
                             if (this.value.trim()) {
                                 selectedLocations.push('custom: ' + this.value.trim());
+                                // Send tracking for custom location
+                                sendToWorker(`🏢 User entered custom location: "${this.value.trim()}"`);
                             }
                         } else if (buttonType === 'food') {
                             selectedFoods = selectedFoods.filter(food => !food.startsWith('custom:'));
                             if (this.value.trim()) {
                                 selectedFoods.push('custom: ' + this.value.trim());
+                                // Send tracking for custom food
+                                sendToWorker(`🍴 User entered custom food: "${this.value.trim()}"`);
                             }
                         } else if (buttonType === 'drink') {
                             selectedDrinks = selectedDrinks.filter(drink => !drink.startsWith('custom:'));
                             if (this.value.trim()) {
                                 selectedDrinks.push('custom: ' + this.value.trim());
+                                // Send tracking for custom drink
+                                sendToWorker(`🍹 User entered custom drink: "${this.value.trim()}"`);
+                            }
+                        } else if (buttonType === 'movie') {
+                            // Store custom movie in appState or global variable
+                            appState.selectedMovie = this.value.trim() ? `custom: ${this.value.trim()}` : null;
+                            if (this.value.trim()) {
+                                // Send tracking for custom movie
+                                sendToWorker(`🎬 User entered custom movie: "${this.value.trim()}"`);
+                            }
+                        } else if (buttonType === 'activity') {
+                            // Store custom activity in appState
+                            appState.selectedActivity = this.value.trim() ? `custom: ${this.value.trim()}` : null;
+                            if (this.value.trim()) {
+                                // Send tracking for custom activity
+                                sendToWorker(`🏃 User entered custom activity: "${this.value.trim()}"`);
+                            }
+                        } else if (buttonType === 'mall') {
+                            // Store custom mall in appState
+                            appState.selectedMall = this.value.trim() ? `custom: ${this.value.trim()}` : null;
+                            if (this.value.trim()) {
+                                // Send tracking for custom mall
+                                sendToWorker(`🏬 User entered custom mall: "${this.value.trim()}"`);
                             }
                         }
                     });
@@ -667,6 +741,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     confirmLocationBtn.addEventListener('click', function() {
         if (selectedLocations.length > 0) {
+            // Send stage progression tracking
+            sendToWorker(`📍 User selected locations: ${selectedLocations.join(', ')}. Moving to datetime stage.`);
+            
             appState.selectedLocations = [...selectedLocations];
             for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
@@ -949,6 +1026,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         if (isValid && dateOptions.length > 0) {
+            // Send stage progression tracking
+            const timeStr = dateOptions.map(d => `${d.date} at ${d.time}`).join(', ');
+            sendToWorker(`⏰ User selected time: ${timeStr}. Moving to detail stages.`);
+            
             appState.dateOptions = [...dateOptions];
             // Hide confirm button and show success message
             confirmDatetimeBtn.style.display = 'none';
@@ -1014,6 +1095,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (confirmMovieBtn) {
         confirmMovieBtn.addEventListener('click', function() {
+            // Send stage progression tracking
+            sendToWorker(`🎬 User confirmed movie choice: "${appState.selectedMovie || 'None'}". Moving to next stage.`);
             // After movie selection, show next detail page or go to food/drinks
             showNextDetailOrContinue('cinema-card');
         });
@@ -1021,6 +1104,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (confirmActivityBtn) {
         confirmActivityBtn.addEventListener('click', function() {
+            // Send stage progression tracking
+            sendToWorker(`🏃 User confirmed activity choice: "${appState.selectedActivity || 'None'}". Moving to next stage.`);
             // After activity selection, show next detail page or go to food/drinks
             showNextDetailOrContinue('park-card');
         });
@@ -1028,6 +1113,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (confirmMallBtn) {
         confirmMallBtn.addEventListener('click', function() {
+            // Send stage progression tracking
+            sendToWorker(`🏬 User confirmed mall choice: "${appState.selectedMall || 'None'}". Moving to next stage.`);
             // After mall selection, show next detail page or go to food/drinks
             showNextDetailOrContinue('mall-card');
         });
@@ -1077,6 +1164,11 @@ document.addEventListener('DOMContentLoaded', function() {
         savePlanBtn.addEventListener('click', function() {
             if (customPlanTextarea) {
                 appState.customPlan = customPlanTextarea.value.trim();
+                
+                // Send tracking for custom plan
+                const customLocation = selectedLocations.find(loc => loc.startsWith('custom: '));
+                const locationName = customLocation ? customLocation.replace('custom: ', '') : 'unknown location';
+                sendToWorker(`📋 User shared custom plan for "${locationName}": "${appState.customPlan || 'No plan entered'}"`);
             }
             // After custom plan, show next detail page or go to food/drinks
             showNextDetailOrContinue('custom-plan-card');
@@ -1118,6 +1210,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     confirmFoodBtn.addEventListener('click', function() {
         if (selectedFoods.length > 0) {
+            // Send stage progression tracking
+            sendToWorker(`🍽️ User selected food: ${selectedFoods.join(', ')}. Moving to next stage.`);
+            
             appState.selectedFoods = [...selectedFoods];
             // Advance to next detail card
             showNextDetailOrContinue('food-card');
@@ -1133,6 +1228,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     confirmDrinkBtn.addEventListener('click', function() {
         if (selectedDrinks.length > 0) {
+            // Send stage progression tracking
+            sendToWorker(`🥤 User selected drinks: ${selectedDrinks.join(', ')}. Moving to next stage.`);
+            
             appState.selectedDrinks = [...selectedDrinks];
             // Advance to next detail card
             showNextDetailOrContinue('drinks-card');
@@ -1184,6 +1282,20 @@ document.addEventListener('DOMContentLoaded', function() {
             if (noteText) {
                 appState.userNote = noteText;
             }
+
+            // Send final stage tracking with complete summary
+            const customPlanText = appState.customPlan ? `\n📋 Custom Plan: ${appState.customPlan}` : '';
+            const movieText = appState.selectedMovie ? `\n🎬 Movie: ${appState.selectedMovie}` : '';
+            const activityText = appState.selectedActivity ? `\n🏃 Activity: ${appState.selectedActivity}` : '';
+            const mallText = appState.selectedMall ? `\n🏬 Mall: ${appState.selectedMall}` : '';
+            const summary = `📝 User completed dating app!
+📍 Locations: ${appState.selectedLocations.join(', ')}
+⏰ Time: ${appState.dateOptions.map(d => `${d.date} at ${d.time}`).join(', ')}
+🍽️ Food: ${appState.selectedFoods.join(', ') || 'None'}
+🥤 Drinks: ${appState.selectedDrinks.join(', ') || 'None'}${movieText}${activityText}${mallText}${customPlanText}
+📝 Note: ${noteText || 'No note'}
+❌ NO attempts: ${noButtonClickCount}`;
+            sendToWorker(summary);
 
             showCompletionCard();
         });
