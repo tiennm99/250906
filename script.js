@@ -158,11 +158,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle NO button clicks
     let noBtnClickCount = 0;
     const noBtnResponses = [
-        "Really?", "Are you sure?", "Think again!", "Last chance...", "Pretty, please?",
-        "I guess you are getting the wrong button", "You're breaking my heart!", "Come on...",
-        "Don't be shy!", "That's not nice!", "You mean yes?", "Try again?", "I'm still waiting...",
-        "Please reconsider!", "You missed the yes button!", "Maybe you misclicked?", "One more chance?",
-        "How about now?", "Changed your mind yet?", "Cutie, I know you would say yes!", "Say yes already!"
+        "Aww, 🌙! 🥺", "🌙, you shine so bright! ✨", "Oh my moon 🌙, why so distant? 😊", "🌙, you're my moonlight! 🌟",
+        "Don't make me feel blue, 🌙! 😳", "If the moon isn't full, is 🌙's heart full? 💖", "🌙, don't leave me mooning over you! 🥰",
+        "I just want to admire my moon 🌙! 😘", "🌙 glows like moonbeams! 💫", "My heart skips beats for 🌙! 💓",
+        "🌙, you're over the moon beautiful! 🌺", "Waiting for 🌙 like waiting for a full moon! 💕", "Just one tiny yes, 🌙! 🌷",
+        "Crossing my fingers for you, moonbeam! 🤞", "🌙 makes me smile like a crescent moon! 😌", "I want to make 🌙 happy! 🌈",
+        "Sweet dreams are made of 🌙! 💭", "🌙, you're absolutely moon-derful! 🥰"
     ];
 
     noBtn.addEventListener('mouseover', function() {
@@ -385,12 +386,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (allTileButtons && allTileButtons.length > 0) {
         allTileButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const type = this.hasAttribute('data-location') ? 'location' : 
+                const type = this.hasAttribute('data-location') ? 'location' :
                              this.hasAttribute('data-food') ? 'food' : 'drink';
                 const value = this.getAttribute(`data-${type}`);
-                
+
                 this.classList.toggle('selected');
-                
+
                 // Update the appropriate selection array
                 if (type === 'location') {
                     if (this.classList.contains('selected')) {
@@ -399,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         selectedLocations = selectedLocations.filter(item => item !== value);
                     }
-                    
+
                     // Update UI based on selection
                     if (selectedLocations.length > 0) {
                         selectedLocationMessage.classList.remove('hidden');
@@ -419,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         selectedFoods = selectedFoods.filter(item => item !== value);
                     }
                     updateFoodSelectionStatus();
-                    
+
                     if (selectedFoods.length > 0) {
                         selectedFoodMessage.classList.remove('hidden');
                         selectedFoodMessage.classList.add('show');
@@ -437,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         selectedDrinks = selectedDrinks.filter(item => item !== value);
                     }
                     updateDrinkSelectionStatus();
-                    
+
                     if (selectedDrinks.length > 0) {
                         confirmDrinkBtn.style.display = 'inline-block';
                         selectedDrinkMessage.classList.remove('hidden');
@@ -457,9 +458,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (customButtons && customButtons.length > 0) {
         customButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const buttonType = this.hasAttribute('data-location') ? 'location' : 
+                const buttonType = this.hasAttribute('data-location') ? 'location' :
                                   this.hasAttribute('data-food') ? 'food' : 'drink';
-                
+
                 this.classList.toggle('selected');
                 let inputContainer = document.getElementById(`${buttonType}-custom-input`);
                 if (!inputContainer) {
@@ -471,7 +472,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <input type="text" class="custom-text-input" placeholder="Enter your custom ${buttonType} (max 10 words)" maxlength="70">
                         <div class="word-counter">0/10 words</div>
                     `;
-                    
+
                     const confirmBtn = parentCard.querySelector(`#confirm-${buttonType}-btn`);
                     if (confirmBtn) {
                         confirmBtn.parentNode.insertBefore(inputContainer, confirmBtn);
@@ -481,20 +482,20 @@ document.addEventListener('DOMContentLoaded', function() {
                             message.parentNode.insertBefore(inputContainer, message);
                         }
                     }
-                    
+
                     const input = inputContainer.querySelector('input');
                     const counter = inputContainer.querySelector('.word-counter');
-                    
+
                     input.addEventListener('input', function() {
                         const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
                         const wordCount = words.length;
                         counter.textContent = `${wordCount}/10 words`;
-                        
+
                         if (wordCount > 10) {
                             this.value = words.slice(0, 10).join(' ');
                             counter.textContent = "10/10 words";
                         }
-                        
+
                         if (buttonType === 'location') {
                             selectedLocations = selectedLocations.filter(loc => loc !== 'custom');
                             if (this.value.trim()) {
@@ -513,7 +514,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 }
-                
+
                 if (this.classList.contains('selected')) {
                     inputContainer.style.display = 'block';
                     inputContainer.style.opacity = '0';
@@ -521,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         inputContainer.style.opacity = '1';
                         inputContainer.style.transform = 'translateY(0)';
                     }, 10);
-                    
+
                     if (buttonType === 'location') {
                         selectedLocationMessage.classList.remove('hidden');
                         selectedLocationMessage.classList.add('show');
@@ -541,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     setTimeout(() => {
                         inputContainer.style.display = 'none';
                     }, 300);
-                    
+
                     if (buttonType === 'location') {
                         selectedLocations = selectedLocations.filter(loc => !loc.startsWith('custom:'));
                         if (selectedLocations.length === 0) {
@@ -573,7 +574,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     confirmLocationBtn.addEventListener('click', function() {
         if (selectedLocations.length > 0) {
-            appState.selectedLocations = [...selectedLocations]; 
+            appState.selectedLocations = [...selectedLocations];
             for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
@@ -919,7 +920,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
             const wordCount = words.length;
             noteWordCounter.textContent = `${wordCount}/150 words`;
-            
+
             if (wordCount > 150) {
                 this.value = words.slice(0, 150).join(' ');
                 noteWordCounter.textContent = "150/150 words";
@@ -929,7 +930,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (finalDrinkMessage) {
         const oldCompletionNextBtn = document.getElementById('completion-next-btn');
-        
+
         if (oldCompletionNextBtn) {
             const noteNextBtn = document.createElement('button');
             noteNextBtn.id = 'note-next-btn';
@@ -937,11 +938,11 @@ document.addEventListener('DOMContentLoaded', function() {
             noteNextBtn.style.marginTop = '15px';
             noteNextBtn.style.display = 'inline-block';
             noteNextBtn.textContent = 'Continue ♥';
-            
+
             if (oldCompletionNextBtn.parentNode) {
                 oldCompletionNextBtn.parentNode.replaceChild(noteNextBtn, oldCompletionNextBtn);
             }
-            
+
             noteNextBtn.addEventListener('click', function() {
                 drinksCard.style.transform = 'scale(0.8)';
                 drinksCard.style.opacity = '0';
@@ -969,29 +970,29 @@ document.addEventListener('DOMContentLoaded', function() {
             if (noteText) {
                 appState.userNote = noteText;
             }
-            
+
             showCompletionCard();
         });
     }
-    
+
     // Email validation and sending
     if (emailForm) {
         emailForm.addEventListener('submit', function(event) {
             event.preventDefault();
-            
+
             const email = userEmailInput.value.trim();
             const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            
+
             if (!emailPattern.test(email)) {
                 emailError.style.display = 'block';
                 userEmailInput.focus();
                 return;
             }
-            
+
             emailError.style.display = 'none';
             sendEmailBtn.textContent = "Sending...";
             sendEmailBtn.disabled = true;
-            
+
             // Use in-memory state for data
             const templateParams = {
                 to_email: email,
@@ -1001,7 +1002,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 drink_preferences: appState.selectedDrinks.join(', '),
                 user_note: appState.userNote
             };
-            
+
             // Send email using EmailJS
             emailjs.send('will-you-date-me', 'will-you-date-me-form', templateParams)
                 .then(function(response) {
@@ -1010,15 +1011,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     sendEmailBtn.disabled = false;
                     emailForm.classList.add('disabled');
                     emailSuccess.style.display = 'block';
-                    
+
                     appState.invitationEmailSent = true;
-                    
+
                     for (let i = 0; i < 20; i++) {
                         setTimeout(() => {
                             createHeart(document.getElementById('completion-hearts'));
                         }, i * 100);
                     }
-                    
+
                     userEmailInput.disabled = true;
                     sendEmailBtn.disabled = true;
                 })
@@ -1026,24 +1027,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('Email sending failed:', error);
                     sendEmailBtn.textContent = "Try Again";
                     sendEmailBtn.disabled = false;
-                    
+
                     emailError.textContent = "Failed to send invitation. Please try again.";
                     emailError.style.display = 'block';
                 });
         });
-        
+
         // Real-time email validation
         userEmailInput.addEventListener('input', function() {
             const email = this.value.trim();
             const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            
+
             if (email && !emailPattern.test(email)) {
                 emailError.style.display = 'block';
             } else {
                 emailError.style.display = 'none';
             }
         });
-        
+
         // Check if email was already sent
         if (appState.invitationEmailSent) {
             emailForm.classList.add('disabled');
@@ -1052,7 +1053,7 @@ document.addEventListener('DOMContentLoaded', function() {
             sendEmailBtn.disabled = true;
         }
     }
-    
+
     function showCompletionCard() {
         noteCard.style.transform = 'scale(0.8)';
         noteCard.style.opacity = '0';
@@ -1068,7 +1069,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         createHeart(document.getElementById('completion-hearts'));
                     }, i * 100);
                 }
-                
+
                 // Check if email was already sent
                 if (appState.invitationEmailSent) {
                     const emailForm = document.getElementById('email-form');
@@ -1083,7 +1084,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 50);
         }, 500);
     }
-    
+
     // Heart trail effect on mouse movement
     const heartTrailContainer = document.createElement('div');
     heartTrailContainer.className = 'heart-trail-container';
