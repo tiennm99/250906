@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedFoods: [],
         selectedDrinks: [],
         userNote: '',
-        invitationEmailSent: false,
+        mapCoordinates: null, // Store selected map coordinates
         detailQueue: [],
         currentDetailIndex: 0
     };
@@ -76,18 +76,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const completionNextBtn = document.getElementById('completion-next-btn');
     const completionHearts = document.getElementById('completion-hearts');
 
-    // Email form elements
-    const emailForm = document.getElementById('email-form');
-    const userEmailInput = document.getElementById('user-email');
-    const sendEmailBtn = document.getElementById('send-email-btn');
-    const emailError = document.getElementById('email-error');
-    const emailSuccess = document.getElementById('email-success');
 
     // Note card elements
     const noteCard = document.getElementById('note-card');
     const noteTextarea = document.getElementById('note-textarea');
     const noteWordCounter = noteCard ? noteCard.querySelector('.word-counter') : null;
     const saveNoteBtn = document.getElementById('save-note-btn');
+
+    // Map elements
+    const mapContainer = document.getElementById('map-container');
+    const areaButtons = document.getElementById('area-buttons');
+    const mapSelectedInfo = document.getElementById('map-selected-info');
+    const selectedCoordsSpan = document.getElementById('selected-coords');
+    let locationMap = null;
+    let mapMarker = null;
+    let selectedCoordinates = null;
 
     // Dark mode toggle
     if (darkmodeToggle) {
@@ -433,6 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         selectedLocationMessage.classList.remove('hidden');
                         selectedLocationMessage.classList.add('show');
                         confirmLocationBtn.style.display = 'inline-block';
+                        updateContinueButtonText('confirm-location-btn', 'location');
                         createButtonHeartEffect(confirmLocationBtn);
                     } else {
                         selectedLocationMessage.classList.remove('show');
@@ -452,6 +456,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         selectedFoodMessage.classList.remove('hidden');
                         selectedFoodMessage.classList.add('show');
                         confirmFoodBtn.style.display = 'inline-block';
+                        updateContinueButtonText('confirm-food-btn', 'food');
                     } else {
                         confirmFoodBtn.style.display = 'none';
                         selectedFoodMessage.classList.remove('show');
@@ -470,6 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         confirmDrinkBtn.style.display = 'inline-block';
                         selectedDrinkMessage.classList.remove('hidden');
                         selectedDrinkMessage.classList.add('show');
+                        updateContinueButtonText('confirm-drink-btn', 'drinks');
                     } else {
                         confirmDrinkBtn.style.display = 'none';
                         selectedDrinkMessage.classList.remove('show');
@@ -483,6 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         movieMessage.classList.remove('hidden');
                         movieMessage.classList.add('show');
                         confirmMovieBtn.style.display = 'inline-block';
+                        updateContinueButtonText('confirm-movie-btn', 'cinema');
                     }
                 } else if (type === 'activity') {
                     createHeartBurst(this, 15);
@@ -492,6 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         activityMessage.classList.remove('hidden');
                         activityMessage.classList.add('show');
                         confirmActivityBtn.style.display = 'inline-block';
+                        updateContinueButtonText('confirm-activity-btn', 'cinema');
                     }
                 } else if (type === 'mall') {
                     createHeartBurst(this, 15);
@@ -501,15 +509,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         mallMessage.classList.remove('hidden');
                         mallMessage.classList.add('show');
                         confirmMallBtn.style.display = 'inline-block';
-                    }
-                } else if (type === 'area') {
-                    createHeartBurst(this, 15);
-                    const areaMessage = document.getElementById('selected-area-message');
-                    const confirmAreaBtn = document.getElementById('confirm-area-btn');
-                    if (areaMessage && confirmAreaBtn) {
-                        areaMessage.classList.remove('hidden');
-                        areaMessage.classList.add('show');
-                        confirmAreaBtn.style.display = 'inline-block';
+                        updateContinueButtonText('confirm-mall-btn', 'mall');
                     }
                 }
             });
@@ -590,14 +590,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         selectedLocationMessage.classList.remove('hidden');
                         selectedLocationMessage.classList.add('show');
                         confirmLocationBtn.style.display = 'inline-block';
+                        updateContinueButtonText('confirm-location-btn', 'location');
                     } else if (buttonType === 'food') {
                         selectedFoodMessage.classList.remove('hidden');
                         selectedFoodMessage.classList.add('show');
                         confirmFoodBtn.style.display = 'inline-block';
+                        updateContinueButtonText('confirm-food-btn', 'food');
                     } else if (buttonType === 'drink') {
                         selectedDrinkMessage.classList.remove('hidden');
                         selectedDrinkMessage.classList.add('show');
                         confirmDrinkBtn.style.display = 'inline-block';
+                        updateContinueButtonText('confirm-drink-btn', 'drinks');
                     }
                 } else {
                     inputContainer.style.opacity = '0';
@@ -698,7 +701,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function showPlanDetailsBasedOnLocation() {
         // Build queue based on the correct order: cafe → restaurant → cinema → park → mall → around city
         const detailQueue = [];
-        
+
         // Add pages in the correct priority order from the original page
         if (selectedLocations.includes('cafe')) {
             detailQueue.push('drinks-card'); // Cafe shows drinks selection
@@ -721,11 +724,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedLocations.includes('somewhere-else') || selectedLocations.some(loc => loc.startsWith('custom:'))) {
             detailQueue.push('custom-plan-card');
         }
-        
+
         // Store the queue for later use
         appState.detailQueue = detailQueue;
         appState.currentDetailIndex = 0;
-        
+
         if (detailQueue.length > 0) {
             // Show first detail page
             const firstDetailCard = detailQueue[0];
@@ -755,7 +758,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function showFoodDrinksBasedOnLocation(currentCard = 'datetime-card') {
         const hasRestaurant = selectedLocations.includes('restaurant');
         const hasCafe = selectedLocations.includes('cafe');
-        
+
         if (hasRestaurant) {
             hideCardAndShowNext(currentCard, 'food-card', 'food-celebration');
         } else if (hasCafe) {
@@ -770,7 +773,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function showCard(cardId, celebrationId) {
         const card = document.getElementById(cardId);
         const celebration = document.getElementById(celebrationId);
-        
+
         card.style.display = 'block';
         setTimeout(() => {
             card.classList.remove('hidden');
@@ -783,13 +786,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, i * 100);
                 }
             }
+
+            // Auto-initialize map when area card is shown
+            if (cardId === 'area-card' && mapContainer) {
+                mapContainer.classList.remove('hidden');
+                setTimeout(() => {
+                    initializeLocationMap();
+                }, 200);
+            }
+            
+            // Set initial button text for note card
+            if (cardId === 'note-card') {
+                updateContinueButtonText('save-note-btn', 'note');
+            }
         }, 50);
     }
 
     // Generic function to hide a card and show the next one
     function hideCardAndShowNext(currentCardId, nextCardId, nextCelebrationId) {
         const currentCard = document.getElementById(currentCardId);
-        
+
         currentCard.style.transform = 'scale(0.8)';
         currentCard.style.opacity = '0';
         setTimeout(() => {
@@ -876,6 +892,7 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedDatetimeMessage.classList.add('show');
             if (foodNextBtn) {
                 foodNextBtn.style.display = 'inline-block';
+                updateContinueButtonText('food-next-btn', 'datetime');
             }
             for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
@@ -952,20 +969,28 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savePlanBtn) {
         const customPlanTextarea = document.getElementById('custom-plan-textarea');
         const customPlanWordCounter = document.querySelector('#custom-plan-card .word-counter');
-        
+
         if (customPlanTextarea && customPlanWordCounter) {
             customPlanTextarea.addEventListener('input', function() {
                 const words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
                 const wordCount = words.length;
                 customPlanWordCounter.textContent = `${wordCount}/200 words`;
-                
+
                 if (wordCount > 200) {
                     this.value = words.slice(0, 200).join(' ');
                     customPlanWordCounter.textContent = "200/200 words";
                 }
+
+                // Show button with dynamic text when user types
+                if (this.value.trim().length > 0) {
+                    savePlanBtn.style.display = 'inline-block';
+                    updateContinueButtonText('save-plan-btn', 'custom');
+                } else {
+                    savePlanBtn.style.display = 'none';
+                }
             });
         }
-        
+
         savePlanBtn.addEventListener('click', function() {
             if (customPlanTextarea) {
                 appState.customPlan = customPlanTextarea.value.trim();
@@ -1104,6 +1129,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.value = words.slice(0, 150).join(' ');
                 noteWordCounter.textContent = "150/150 words";
             }
+
+            // Update button text dynamically  
+            updateContinueButtonText('save-note-btn', 'note');
         });
     }
 
@@ -1140,83 +1168,184 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Email validation and sending
-    if (emailForm) {
-        emailForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const email = userEmailInput.value.trim();
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-            if (!emailPattern.test(email)) {
-                emailError.style.display = 'block';
-                userEmailInput.focus();
-                return;
-            }
-
-            emailError.style.display = 'none';
-            sendEmailBtn.textContent = "Sending...";
-            sendEmailBtn.disabled = true;
-
-            // Use in-memory state for data
-            const templateParams = {
-                to_email: email,
-                date_options: appState.dateOptions.map(opt => `${opt.date} at ${opt.time}`).join(', '),
-                locations: appState.selectedLocations.join(', '),
-                food_preferences: appState.selectedFoods.join(', '),
-                drink_preferences: appState.selectedDrinks.join(', '),
-                user_note: appState.userNote
-            };
-
-            // Send email using EmailJS
-            emailjs.send('will-you-date-me', 'will-you-date-me-form', templateParams)
-                .then(function(response) {
-                    console.log('Email sent successfully!', response.status, response.text);
-                    sendEmailBtn.textContent = "Send Invitation";
-                    sendEmailBtn.disabled = false;
-                    emailForm.classList.add('disabled');
-                    emailSuccess.style.display = 'block';
-
-                    appState.invitationEmailSent = true;
-
-                    for (let i = 0; i < 20; i++) {
-                        setTimeout(() => {
-                            createHeart(document.getElementById('completion-hearts'));
-                        }, i * 100);
-                    }
-
-                    userEmailInput.disabled = true;
-                    sendEmailBtn.disabled = true;
-                })
-                .catch(function(error) {
-                    console.error('Email sending failed:', error);
-                    sendEmailBtn.textContent = "Try Again";
-                    sendEmailBtn.disabled = false;
-
-                    emailError.textContent = "Failed to send invitation. Please try again.";
-                    emailError.style.display = 'block';
-                });
-        });
-
-        // Real-time email validation
-        userEmailInput.addEventListener('input', function() {
-            const email = this.value.trim();
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-            if (email && !emailPattern.test(email)) {
-                emailError.style.display = 'block';
-            } else {
-                emailError.style.display = 'none';
-            }
-        });
-
-        // Check if email was already sent
-        if (appState.invitationEmailSent) {
-            emailForm.classList.add('disabled');
-            emailSuccess.style.display = 'block';
-            userEmailInput.disabled = true;
-            sendEmailBtn.disabled = true;
+    // Function to get next stage button text
+    function getNextStageButtonText(currentStage) {
+        // Build the same queue logic as showPlanDetailsBasedOnLocation to determine flow
+        const detailQueue = [];
+        
+        // Priority order: cafe → restaurant → cinema → park → mall → around-city → custom
+        if (selectedLocations.includes('cafe')) {
+            detailQueue.push('drinks-card');
         }
+        if (selectedLocations.includes('restaurant')) {
+            detailQueue.push('food-card');
+        }
+        if (selectedLocations.includes('cinema')) {
+            detailQueue.push('cinema-card');
+        }
+        if (selectedLocations.includes('park')) {
+            detailQueue.push('park-card');
+        }
+        if (selectedLocations.includes('mall')) {
+            detailQueue.push('mall-card');
+        }
+        if (selectedLocations.includes('around-city')) {
+            detailQueue.push('area-card');
+        }
+        if (selectedLocations.includes('somewhere-else') || selectedLocations.some(loc => loc.startsWith('custom:'))) {
+            detailQueue.push('custom-plan-card');
+        }
+        
+        if (currentStage === 'location') {
+            return "Let's pick a date ♥";
+        }
+        
+        if (currentStage === 'datetime') {
+            if (detailQueue.length > 0) {
+                const nextCard = detailQueue[0];
+                if (nextCard === 'drinks-card') return "Choose some drinks ♥";
+                if (nextCard === 'food-card') return "Let's pick food ♥";
+                if (nextCard === 'cinema-card') return "Pick a movie ♥";
+                if (nextCard === 'park-card') return "Pick activities ♥";
+                if (nextCard === 'mall-card') return "Choose a mall ♥";
+                if (nextCard === 'area-card') return "Mark location ♥";
+                if (nextCard === 'custom-plan-card') return "Tell me your plan ♥";
+            } else {
+                return "Add a note ♥";
+            }
+        }
+        
+        // After detail cards, find what comes next
+        if (currentStage === 'cinema' || currentStage === 'mall' || currentStage === 'area' || currentStage === 'custom') {
+            // Find current card in queue and return next
+            const currentCardMap = {
+                'cinema': 'cinema-card',
+                'mall': 'mall-card', 
+                'area': 'area-card',
+                'custom': 'custom-plan-card'
+            };
+            const currentCardId = currentCardMap[currentStage];
+            const currentIndex = detailQueue.indexOf(currentCardId);
+            
+            if (currentIndex !== -1 && currentIndex < detailQueue.length - 1) {
+                const nextCard = detailQueue[currentIndex + 1];
+                if (nextCard === 'drinks-card') return "Choose some drinks ♥";
+                if (nextCard === 'food-card') return "Let's pick food ♥";
+                if (nextCard === 'cinema-card') return "Pick a movie ♥";
+                if (nextCard === 'park-card') return "Pick activities ♥";
+                if (nextCard === 'mall-card') return "Choose a mall ♥";
+                if (nextCard === 'area-card') return "Mark location ♥";
+                if (nextCard === 'custom-plan-card') return "Tell me your plan ♥";
+            }
+            return "Add a note ♥";
+        }
+        
+        if (currentStage === 'food') {
+            // After food, find what comes next in queue
+            const foodIndex = detailQueue.indexOf('food-card');
+            if (foodIndex !== -1 && foodIndex < detailQueue.length - 1) {
+                const nextCard = detailQueue[foodIndex + 1];
+                if (nextCard === 'drinks-card') return "Choose some drinks ♥";
+                if (nextCard === 'cinema-card') return "Pick a movie ♥";
+                if (nextCard === 'park-card') return "Pick activities ♥";
+                if (nextCard === 'mall-card') return "Choose a mall ♥";
+                if (nextCard === 'area-card') return "Mark location ♥";
+                if (nextCard === 'custom-plan-card') return "Tell me your plan ♥";
+            }
+            return "Add a note ♥";
+        }
+        
+        if (currentStage === 'drinks') {
+            // After drinks, find what comes next in queue
+            const drinksIndex = detailQueue.indexOf('drinks-card');
+            if (drinksIndex !== -1 && drinksIndex < detailQueue.length - 1) {
+                const nextCard = detailQueue[drinksIndex + 1];
+                if (nextCard === 'food-card') return "Let's pick food ♥";
+                if (nextCard === 'cinema-card') return "Pick a movie ♥";
+                if (nextCard === 'park-card') return "Pick activities ♥";
+                if (nextCard === 'mall-card') return "Choose a mall ♥";
+                if (nextCard === 'area-card') return "Mark location ♥";
+                if (nextCard === 'custom-plan-card') return "Tell me your plan ♥";
+            }
+            return "Add a note ♥";
+        }
+        
+        if (currentStage === 'note') {
+            return "Complete our date ♥";
+        }
+        
+        // Default fallback
+        return "Continue ♥";
+    }
+
+    // Function to update button text dynamically
+    function updateContinueButtonText(buttonId, currentStage) {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.textContent = getNextStageButtonText(currentStage);
+        }
+    }
+
+    // Map initialization and functionality
+    function initializeLocationMap() {
+        if (locationMap) {
+            locationMap.remove();
+        }
+
+        // Initialize map centered on Ho Chi Minh City, Vietnam
+        locationMap = L.map('location-map').setView([10.8231, 106.6297], 12);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(locationMap);
+
+        // Add click event to place marker
+        locationMap.on('click', function(e) {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+
+            // Remove existing marker
+            if (mapMarker) {
+                locationMap.removeLayer(mapMarker);
+            }
+
+            // Add new marker
+            mapMarker = L.marker([lat, lng]).addTo(locationMap);
+
+            // Store coordinates
+            selectedCoordinates = { lat: lat, lng: lng };
+            appState.mapCoordinates = { lat: lat, lng: lng };
+
+            // Update UI
+            if (selectedCoordsSpan && mapSelectedInfo) {
+                selectedCoordsSpan.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                mapSelectedInfo.classList.remove('hidden');
+            }
+
+            // Show continue button
+            const areaMessage = document.getElementById('selected-area-message');
+            const confirmAreaBtn = document.getElementById('confirm-area-btn');
+            if (areaMessage && confirmAreaBtn) {
+                areaMessage.querySelector('.message').textContent = 'Perfect location! 📍';
+                areaMessage.classList.remove('hidden');
+                areaMessage.classList.add('show');
+                confirmAreaBtn.style.display = 'inline-block';
+                updateContinueButtonText('confirm-area-btn', 'area');
+            }
+
+            // Store map coordinates in appState
+            appState.selectedLocations = appState.selectedLocations.filter(loc => !loc.startsWith('map:'));
+            appState.selectedLocations.push(`map:${lat.toFixed(6)},${lng.toFixed(6)}`);
+
+            // Create heart animation
+            createFloatingHeart();
+        });
+
+        // Resize map after a brief delay to ensure proper rendering
+        setTimeout(() => {
+            locationMap.invalidateSize();
+        }, 100);
     }
 
     function showCompletionCard() {
@@ -1235,17 +1364,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, i * 100);
                 }
 
-                // Check if email was already sent
-                if (appState.invitationEmailSent) {
-                    const emailForm = document.getElementById('email-form');
-                    const emailSuccess = document.getElementById('email-success');
-                    if (emailForm && emailSuccess) {
-                        emailForm.classList.add('disabled');
-                        emailSuccess.style.display = 'block';
-                        document.getElementById('user-email').disabled = true;
-                        document.getElementById('send-email-btn').disabled = true;
-                    }
-                }
             }, 50);
         }, 500);
     }

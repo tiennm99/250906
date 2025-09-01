@@ -9,17 +9,10 @@
     <link rel="icon" href="images/sweet-heart.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <!-- EmailJS SDK -->
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-    </script>
-    <script type="text/javascript">
-    (function(){
-        emailjs.init({
-            publicKey: "PUBLIC_KEY",
-        });
-    })();
-    </script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Dark mode initialization -->
     <script>
         (function() {
@@ -258,11 +251,11 @@
                         <span class="tile-label">Café</span>
                     </button>
                     <button class="tile-btn" data-location="restaurant">
-                        <img src="images/places/restaurant.jfif" alt="Restaurant">
+                        <img src="images/places/restaurant.jpg" alt="Restaurant">
                         <span class="tile-label">Restaurant</span>
                     </button>
                     <button class="tile-btn" data-location="cinema">
-                        <img src="images/places/cinema.jfif" alt="Cinema">
+                        <img src="images/places/cinema.jpg" alt="Cinema">
                         <span class="tile-label">Cinema</span>
                     </button>
                     <button class="tile-btn" data-location="park">
@@ -270,7 +263,7 @@
                         <span class="tile-label">Park</span>
                     </button>
                     <button class="tile-btn" data-location="mall">
-                        <img src="images/places/mall.jfif" alt="Shopping Mall">
+                        <img src="images/places/mall.jpg" alt="Shopping Mall">
                         <span class="tile-label">Mall</span>
                     </button>
                     <button class="tile-btn" data-location="around-city">
@@ -324,19 +317,19 @@
                 <p class="question">What would you like to watch?</p>
                 <div class="location-options">
                     <button class="tile-btn" data-movie="action">
-                        <img src="images/places/cinema.jfif" alt="Action Movies">
+                        <img src="images/places/cinema.jpg" alt="Action Movies">
                         <span class="tile-label">Action</span>
                     </button>
                     <button class="tile-btn" data-movie="romance">
-                        <img src="images/places/cinema.jfif" alt="Romance Movies">
+                        <img src="images/places/cinema.jpg" alt="Romance Movies">
                         <span class="tile-label">Romance</span>
                     </button>
                     <button class="tile-btn" data-movie="comedy">
-                        <img src="images/places/cinema.jfif" alt="Comedy Movies">
+                        <img src="images/places/cinema.jpg" alt="Comedy Movies">
                         <span class="tile-label">Comedy</span>
                     </button>
                     <button class="tile-btn" data-movie="horror">
-                        <img src="images/places/cinema.jfif" alt="Horror Movies">
+                        <img src="images/places/cinema.jpg" alt="Horror Movies">
                         <span class="tile-label">Horror</span>
                     </button>
                     <button class="custom-btn" data-movie="custom">
@@ -396,19 +389,19 @@
                 <p class="question">Where would you like to go shopping?</p>
                 <div class="location-options">
                     <button class="tile-btn" data-mall="vincom">
-                        <img src="images/places/mall.jfif" alt="Vincom Center">
+                        <img src="images/places/mall.jpg" alt="Vincom Center">
                         <span class="tile-label">Vincom Center</span>
                     </button>
                     <button class="tile-btn" data-mall="lotte">
-                        <img src="images/places/mall.jfif" alt="Lotte Center">
+                        <img src="images/places/mall.jpg" alt="Lotte Center">
                         <span class="tile-label">Lotte Center</span>
                     </button>
                     <button class="tile-btn" data-mall="diamond">
-                        <img src="images/places/mall.jfif" alt="Diamond Plaza">
+                        <img src="images/places/mall.jpg" alt="Diamond Plaza">
                         <span class="tile-label">Diamond Plaza</span>
                     </button>
                     <button class="tile-btn" data-mall="saigon">
-                        <img src="images/places/mall.jfif" alt="Saigon Centre">
+                        <img src="images/places/mall.jpg" alt="Saigon Centre">
                         <span class="tile-label">Saigon Centre</span>
                     </button>
                     <button class="custom-btn" data-mall="custom">
@@ -430,28 +423,17 @@
                 <h1>Which <span class="special-text">area</span>?</h1>
                 <div class="sakura-divider"></div>
                 <p class="question">Where in the city would you like to explore?</p>
-                <div class="location-options">
-                    <button class="tile-btn" data-area="district1">
-                        <img src="images/places/around-the-city.jpg" alt="District 1">
-                        <span class="tile-label">District 1</span>
-                    </button>
-                    <button class="tile-btn" data-area="district3">
-                        <img src="images/places/around-the-city.jpg" alt="District 3">
-                        <span class="tile-label">District 3</span>
-                    </button>
-                    <button class="tile-btn" data-area="district7">
-                        <img src="images/places/around-the-city.jpg" alt="District 7">
-                        <span class="tile-label">District 7</span>
-                    </button>
-                    <button class="tile-btn" data-area="thuduc">
-                        <img src="images/places/around-the-city.jpg" alt="Thu Duc City">
-                        <span class="tile-label">Thu Duc City</span>
-                    </button>
-                    <button class="custom-btn" data-area="custom">
-                        <span class="custom-icon">🏙️</span>
-                        <span><strong>Other Area</strong></span>
-                    </button>
+
+
+                <!-- Map container (initially hidden) -->
+                <div class="map-container hidden" id="map-container">
+                    <p class="map-instruction">Click on the map to mark your preferred location:</p>
+                    <div id="location-map"></div>
+                    <div class="map-selected-info hidden" id="map-selected-info">
+                        <p class="selected-coordinates">📍 Selected: <span id="selected-coords"></span></p>
+                    </div>
                 </div>
+
                 <div class="selected-location-message hidden" id="selected-area-message">
                     <p class="message">Great area! 🏙️</p>
                 </div>
@@ -532,7 +514,7 @@
                 </div>
                 <div class="location-options">
                     <button class="tile-btn" data-drink="coffee">
-                        <img src="images/drinks/coffee.jfif" alt="Coffee">
+                        <img src="images/drinks/coffee.jpg" alt="Coffee">
                         <span class="tile-label">Coffee</span>
                     </button>
                     <button class="tile-btn" data-drink="tea">
@@ -591,24 +573,6 @@
                 <p class="message">I'll prepare for our date.</p>
                 <p class="message">I'll make it special to the best of my ability.</p>
 
-                <!-- Email subscription form -->
-                <div class="email-container" id="email-container">
-                    <p class="email-label">Want a reminder? (optional)</p>
-                    <form id="email-form" class="email-form">
-                        <input
-                            type="email"
-                            id="user-email"
-                            placeholder="Enter your email"
-                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                            title="Please enter a valid email address"
-                        />
-                        <button type="submit" id="send-email-btn" class="btn yes-btn">Send Invitation</button>
-                    </form>
-                    <p id="email-error" class="email-error">Please enter a valid email address</p>
-                    <div id="email-success" class="email-success">
-                        <p>✅ Invitation sent successfully!</p>
-                    </div>
-                </div>
             </div>
         </div>
 

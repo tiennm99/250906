@@ -1489,99 +1489,65 @@ body:hover .scrollbar-decoration {
     margin-top: 20px;
 }
 
-/* Email form styling */
-.email-container {
-    margin-top: 30px;
+
+/* Map container styling */
+.map-container {
+    margin-top: 20px;
+    padding: 20px;
     background: rgba(255, 107, 149, 0.05);
     border-radius: 15px;
-    padding: 20px;
     transition: all 0.3s ease;
 }
 
-.dark-mode .email-container {
+.dark-mode .map-container {
     background: rgba(255, 139, 179, 0.1);
 }
 
-.email-label {
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 15px;
+.map-instruction {
+    font-size: 16px;
     color: #666;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 500;
 }
 
-.dark-mode .email-label {
+.dark-mode .map-instruction {
     color: #bbb;
 }
 
-.email-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-#user-email {
+#location-map {
+    height: 300px;
     width: 100%;
-    padding: 14px 18px;
-    border: 2px solid rgba(255, 182, 193, 0.5);
     border-radius: 12px;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
-    background: white;
-    color: #333;
-    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 107, 149, 0.2);
+    overflow: hidden;
 }
 
-.dark-mode #user-email {
-    background: #1e1e1e;
+.dark-mode #location-map {
     border-color: rgba(255, 107, 149, 0.3);
-    color: #e6e6e6;
 }
 
-#user-email:focus {
-    border-color: rgba(255, 107, 149, 0.8);
-    outline: none;
-    box-shadow: 0 4px 10px rgba(255, 107, 149, 0.2);
-}
-
-#user-email:invalid:not(:placeholder-shown) {
-    border-color: #ff3366;
-    animation: shake 0.3s;
-}
-
-#send-email-btn {
-    align-self: center;
-    margin-top: 10px;
-}
-
-.email-error {
-    color: #ff3366;
-    font-size: 14px;
-    margin-top: 5px;
-    display: none;
-}
-
-.email-success {
+.map-selected-info {
     margin-top: 15px;
     padding: 10px 15px;
     background: rgba(76, 175, 80, 0.1);
     border-radius: 10px;
+    text-align: center;
+}
+
+.dark-mode .map-selected-info {
+    background: rgba(76, 175, 80, 0.2);
+}
+
+.selected-coordinates {
+    font-size: 14px;
     color: #4CAF50;
     font-weight: 600;
-    text-align: center;
-    display: none;
-    animation: fadeIn 0.5s ease;
+    margin: 0;
 }
 
-.dark-mode .email-success {
-    background: rgba(76, 175, 80, 0.2);
+.dark-mode .selected-coordinates {
     color: #8BC34A;
-}
-
-.email-form.disabled input, 
-.email-form.disabled button {
-    opacity: 0.6;
-    pointer-events: none;
-    cursor: not-allowed;
 }
 
 .big-message {

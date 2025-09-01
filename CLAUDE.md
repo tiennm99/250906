@@ -23,18 +23,18 @@ This is a romantic interactive web application called "will-you-date-me" - a pla
 5. Food selection card
 6. Drinks selection card
 7. Note-leaving card
-8. Final completion card with email invitation
+8. Final completion card
 
 **State Management**: Uses in-memory JavaScript objects (`appState`) to track:
 - Dark mode preference
 - Selected locations, foods, drinks
 - Date options
 - User notes
-- Email invitation status
+- Map coordinates (when location is marked on map)
 
 **External Dependencies**:
 - Flatpickr - Date/time picker functionality
-- EmailJS - Email sending service (requires PUBLIC_KEY configuration)
+- Leaflet.js - Interactive map functionality for location marking
 - Google Fonts (Quicksand)
 
 ## Key Features
@@ -45,10 +45,9 @@ This is a romantic interactive web application called "will-you-date-me" - a pla
 - Playful "NO" button that moves when hovered
 - Nervous cat SVG with sweat drop animations
 - Heart burst animations on selections
+- Interactive Leaflet map for custom location marking (Ho Chi Minh City centered)
 
 **Dark Mode**: Full dark mode support with system preference detection and manual toggle.
-
-**Email Integration**: Uses EmailJS to send date invitation summaries to user-provided email addresses.
 
 ## Development Notes
 
@@ -58,4 +57,9 @@ This is a romantic interactive web application called "will-you-date-me" - a pla
 
 **Animation System**: Heavy use of CSS animations and JavaScript-based Web Animations API for smooth transitions and effects.
 
-**EmailJS Configuration**: The PUBLIC_KEY in index.html (line 19) needs to be configured for email functionality to work.
+**Map Integration**: Leaflet.js integration allows users to click on map to select custom locations when choosing "around the city" option. Selected coordinates are stored in appState and formatted as `map:lat,lng`.
+
+
+## Deployment
+
+**GitHub Pages**: Automated deployment via GitHub Actions workflow (`.github/workflows/static.yml`) that deploys the entire repository as static content to GitHub Pages on pushes to main branch.
