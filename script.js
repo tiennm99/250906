@@ -908,7 +908,8 @@ document.addEventListener('DOMContentLoaded', function() {
     //     }, 10);
     // });
 
-    confirmDatetimeBtn.addEventListener('click', function() {
+    // Function to save datetime and show confirmation message
+    function saveDatetimeSelection() {
         let isValid = true;
         const dateOptions = [];
         const fixedDate = "06/09/2025"; // Fixed date
@@ -924,8 +925,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 dateOptions.push({ date: fixedDate, time });
             }
         });
+        
         if (isValid && dateOptions.length > 0) {
             appState.dateOptions = [...dateOptions];
+            // Hide confirm button and show success message
             confirmDatetimeBtn.style.display = 'none';
             selectedDatetimeMessage.classList.remove('hidden');
             selectedDatetimeMessage.classList.add('show');
@@ -933,16 +936,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 foodNextBtn.style.display = 'inline-block';
                 updateContinueButtonText('food-next-btn', 'datetime');
             }
-            for (let i = 0; i < 50; i++) {
+            
+            // Show celebration hearts (reduced count)
+            for (let i = 0; i < 25; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
                     heart.classList.add('heart');
                     heart.style.left = '50%';
                     heart.style.top = '50%';
                     const angle = Math.random() * Math.PI * 2;
-                    const distance = Math.random() * 150 + 50;
-                    const duration = Math.random() * 1 + 1;
-                    heart.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
+                    const distance = Math.random() * 100 + 30;
+                    const duration = Math.random() * 0.8 + 0.8;
+                    heart.style.transform = `scale(${Math.random() * 0.4 + 0.3})`;
                     heart.style.opacity = Math.random() * 0.5 + 0.5;
                     heart.animate([
                         { transform: 'translate(-50%, -50%) scale(0.5)', opacity: 1 },
@@ -955,18 +960,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     setTimeout(() => {
                         heart.remove();
                     }, duration * 1000);
-                }, i * 40);
+                }, i * 30);
             }
-            // addDatetimeBtn.disabled = true; // Button removed
-            // Remove buttons no longer exist
-            // datetimeContainer.querySelectorAll('.remove-datetime').forEach(btn => {
-            //     btn.disabled = true;
-            //     btn.style.opacity = 0.5;
-            // });
-            datetimeContainer.querySelectorAll('input').forEach(input => {
-                input.disabled = true;
-                input.style.opacity = 0.7;
-            });
+            
+            // Keep inputs editable (don't disable them)
+            return true;
+        }
+        return false;
+    }
+
+    confirmDatetimeBtn.addEventListener('click', function() {
+        saveDatetimeSelection();
+    });
+    
+    // Save datetime when user clicks outside time input
+    datetimeContainer.addEventListener('change', function(e) {
+        if (e.target.classList.contains('time-picker')) {
+            // Small delay to allow time picker to close
+            setTimeout(() => {
+                saveDatetimeSelection();
+            }, 100);
         }
     });
 
