@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if all images exist and log any missing ones
+    const images = document.querySelectorAll('img[src^="images/"]');
+    images.forEach(img => {
+        img.addEventListener('error', function() {
+            console.warn('Missing image:', this.src);
+        });
+    });
     // Main UI elements
     const yesBtn = document.getElementById('yes-btn');
     const noBtn = document.getElementById('no-btn');
@@ -1318,7 +1325,7 @@ document.addEventListener('DOMContentLoaded', function() {
             appState.selectedLocations.push(`map:${lat.toFixed(6)},${lng.toFixed(6)}`);
 
             // Create heart animation
-            createFloatingHeart();
+            createHeartBurst(mapContainer, 5);
         });
 
         // Resize map after a brief delay to ensure proper rendering
