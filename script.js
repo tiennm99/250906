@@ -420,7 +420,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     value = this.getAttribute('data-area');
                 }
 
-                this.classList.toggle('selected');
+                // Only toggle for multi-choice selections (location only now)
+                if (type === 'location') {
+                    this.classList.toggle('selected');
+                }
+                // Single choice types (movie, activity, mall, food, drink) are handled in their specific sections
 
                 // Update the appropriate selection array
                 if (type === 'location') {
@@ -444,44 +448,42 @@ document.addEventListener('DOMContentLoaded', function() {
                         confirmLocationBtn.style.display = 'none';
                     }
                 } else if (type === 'food') {
-                    if (this.classList.contains('selected')) {
-                        selectedFoods.push(value);
-                        createHeartBurst(this, 15);
-                    } else {
-                        selectedFoods = selectedFoods.filter(item => item !== value);
-                    }
+                    // Single choice - remove previous selection and select this one
+                    document.querySelectorAll('[data-food]').forEach(btn => btn.classList.remove('selected'));
+                    // Also clear custom food selections
+                    document.querySelectorAll('.custom-btn[data-food="custom"]').forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    // Clear previous selections and add current one
+                    selectedFoods = [value];
+                    createHeartBurst(this, 15);
+                    
+                    selectedFoodMessage.classList.remove('hidden');
+                    selectedFoodMessage.classList.add('show');
+                    confirmFoodBtn.style.display = 'inline-block';
+                    updateContinueButtonText('confirm-food-btn', 'food');
                     updateFoodSelectionStatus();
-
-                    if (selectedFoods.length > 0) {
-                        selectedFoodMessage.classList.remove('hidden');
-                        selectedFoodMessage.classList.add('show');
-                        confirmFoodBtn.style.display = 'inline-block';
-                        updateContinueButtonText('confirm-food-btn', 'food');
-                    } else {
-                        confirmFoodBtn.style.display = 'none';
-                        selectedFoodMessage.classList.remove('show');
-                        selectedFoodMessage.classList.add('hidden');
-                    }
                 } else if (type === 'drink') {
-                    if (this.classList.contains('selected')) {
-                        selectedDrinks.push(value);
-                        createHeartBurst(this, 15);
-                    } else {
-                        selectedDrinks = selectedDrinks.filter(item => item !== value);
-                    }
+                    // Single choice - remove previous selection and select this one
+                    document.querySelectorAll('[data-drink]').forEach(btn => btn.classList.remove('selected'));
+                    // Also clear custom drink selections
+                    document.querySelectorAll('.custom-btn[data-drink="custom"]').forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    // Clear previous selections and add current one
+                    selectedDrinks = [value];
+                    createHeartBurst(this, 15);
+                    
+                    confirmDrinkBtn.style.display = 'inline-block';
+                    selectedDrinkMessage.classList.remove('hidden');
+                    selectedDrinkMessage.classList.add('show');
+                    updateContinueButtonText('confirm-drink-btn', 'drinks');
                     updateDrinkSelectionStatus();
-
-                    if (selectedDrinks.length > 0) {
-                        confirmDrinkBtn.style.display = 'inline-block';
-                        selectedDrinkMessage.classList.remove('hidden');
-                        selectedDrinkMessage.classList.add('show');
-                        updateContinueButtonText('confirm-drink-btn', 'drinks');
-                    } else {
-                        confirmDrinkBtn.style.display = 'none';
-                        selectedDrinkMessage.classList.remove('show');
-                        selectedDrinkMessage.classList.add('hidden');
-                    }
                 } else if (type === 'movie') {
+                    // Single choice - remove previous selection and select this one
+                    document.querySelectorAll('[data-movie]').forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
                     createHeartBurst(this, 15);
                     const movieMessage = document.getElementById('selected-movie-message');
                     const confirmMovieBtn = document.getElementById('confirm-movie-btn');
@@ -492,6 +494,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         updateContinueButtonText('confirm-movie-btn', 'cinema');
                     }
                 } else if (type === 'activity') {
+                    // Single choice - remove previous selection and select this one
+                    document.querySelectorAll('[data-activity]').forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
                     createHeartBurst(this, 15);
                     const activityMessage = document.getElementById('selected-activity-message');
                     const confirmActivityBtn = document.getElementById('confirm-activity-btn');
@@ -502,6 +508,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         updateContinueButtonText('confirm-activity-btn', 'cinema');
                     }
                 } else if (type === 'mall') {
+                    // Single choice - remove previous selection and select this one
+                    document.querySelectorAll('[data-mall]').forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
                     createHeartBurst(this, 15);
                     const mallMessage = document.getElementById('selected-mall-message');
                     const confirmMallBtn = document.getElementById('confirm-mall-btn');
@@ -592,15 +602,25 @@ document.addEventListener('DOMContentLoaded', function() {
                         confirmLocationBtn.style.display = 'inline-block';
                         updateContinueButtonText('confirm-location-btn', 'location');
                     } else if (buttonType === 'food') {
+                        // Single choice - clear other food selections when custom is selected
+                        document.querySelectorAll('[data-food]').forEach(btn => btn.classList.remove('selected'));
+                        selectedFoods = [];
+                        
                         selectedFoodMessage.classList.remove('hidden');
                         selectedFoodMessage.classList.add('show');
                         confirmFoodBtn.style.display = 'inline-block';
                         updateContinueButtonText('confirm-food-btn', 'food');
+                        updateFoodSelectionStatus();
                     } else if (buttonType === 'drink') {
+                        // Single choice - clear other drink selections when custom is selected
+                        document.querySelectorAll('[data-drink]').forEach(btn => btn.classList.remove('selected'));
+                        selectedDrinks = [];
+                        
                         selectedDrinkMessage.classList.remove('hidden');
                         selectedDrinkMessage.classList.add('show');
                         confirmDrinkBtn.style.display = 'inline-block';
                         updateContinueButtonText('confirm-drink-btn', 'drinks');
+                        updateDrinkSelectionStatus();
                     }
                 } else {
                     inputContainer.style.opacity = '0';
@@ -795,9 +815,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 200);
             }
             
-            // Set initial button text for note card
+            // Set initial button text for cards
             if (cardId === 'note-card') {
                 updateContinueButtonText('save-note-btn', 'note');
+            } else if (cardId === 'food-card') {
+                // Set initial text for food selection
+                const confirmFoodBtn = document.getElementById('confirm-food-btn');
+                if (confirmFoodBtn) {
+                    confirmFoodBtn.textContent = "Pick a food first ♥";
+                }
+            } else if (cardId === 'drinks-card') {
+                // Set initial text for drinks selection
+                const confirmDrinkBtn = document.getElementById('confirm-drink-btn');
+                if (confirmDrinkBtn) {
+                    confirmDrinkBtn.textContent = "Pick a drink first ♥";
+                }
             }
         }, 50);
     }
@@ -982,11 +1014,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 // Show button with dynamic text when user types
+                const customMessage = document.getElementById('selected-custom-message');
                 if (this.value.trim().length > 0) {
                     savePlanBtn.style.display = 'inline-block';
                     updateContinueButtonText('save-plan-btn', 'custom');
+                    if (customMessage) {
+                        customMessage.classList.remove('hidden');
+                        customMessage.classList.add('show');
+                    }
                 } else {
                     savePlanBtn.style.display = 'none';
+                    if (customMessage) {
+                        customMessage.classList.remove('show');
+                        customMessage.classList.add('hidden');
+                    }
                 }
             });
         }
@@ -1036,47 +1077,8 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmFoodBtn.addEventListener('click', function() {
         if (selectedFoods.length > 0) {
             appState.selectedFoods = [...selectedFoods];
-            confirmFoodBtn.style.display = 'none';
-            finalMessage.classList.remove('hidden');
-            setTimeout(() => {
-                finalMessage.classList.add('show');
-            }, 50);
-            for (let i = 0; i < 30; i++) {
-                setTimeout(() => {
-                    const heart = document.createElement('div');
-                    heart.classList.add('heart');
-                    heart.style.left = '50%';
-                    heart.style.top = '50%';
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = Math.random() * 150 + 50;
-                    const duration = Math.random() * 1 + 1;
-                    heart.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
-                    heart.style.opacity = Math.random() * 0.5 + 0.5;
-                    heart.animate([
-                        { transform: 'translate(-50%, -50%) scale(0.5)', opacity: 1 },
-                        { transform: `translate(calc(-50% + ${Math.cos(angle) * distance}px), calc(-50% + ${Math.sin(angle) * distance}px)) scale(0)`, opacity: 0 }
-                    ], {
-                        duration: duration * 1000,
-                        easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)'
-                    });
-                    foodCelebration.appendChild(heart);
-                    setTimeout(() => {
-                        heart.remove();
-                    }, duration * 1000);
-                }, i * 40);
-            }
-            const foodButtonsAll = document.querySelectorAll('.tile-btn[data-food], .custom-btn[data-food]');
-            foodButtonsAll.forEach(btn => {
-                btn.disabled = true;
-                btn.style.opacity = '0.7';
-                btn.style.cursor = 'default';
-            });
-            if (customFoodInput) {
-                customFoodInput.disabled = true;
-                addCustomFoodBtn.disabled = true;
-                customFoodInput.style.opacity = '0.7';
-                addCustomFoodBtn.style.opacity = '0.7';
-            }
+            // Advance to next detail card
+            showNextDetailOrContinue('food-card');
         }
     });
 
@@ -1090,31 +1092,8 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmDrinkBtn.addEventListener('click', function() {
         if (selectedDrinks.length > 0) {
             appState.selectedDrinks = [...selectedDrinks];
-            confirmDrinkBtn.style.display = 'none';
-            finalDrinkMessage.classList.remove('hidden');
-            setTimeout(() => {
-                finalDrinkMessage.classList.add('show');
-            }, 50);
-            for (let i = 0; i < 30; i++) {
-                setTimeout(() => {
-                    const heart = document.createElement('div');
-                    heart.classList.add('heart');
-                    heart.style.left = Math.random() * 100 + '%';
-                    heart.style.top = Math.random() * 100 + '%';
-                    heart.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
-                    heart.style.opacity = Math.random() * 0.5 + 0.5;
-                    drinksCelebration.appendChild(heart);
-                    setTimeout(() => {
-                        heart.remove();
-                    }, 1000);
-                }, i * 100);
-            }
-            const drinkButtonsAll = document.querySelectorAll('.tile-btn[data-drink], .custom-btn[data-drink]');
-            drinkButtonsAll.forEach(btn => {
-                btn.disabled = true;
-                btn.style.opacity = '0.7';
-                btn.style.cursor = 'default';
-            });
+            // Advance to next detail card
+            showNextDetailOrContinue('drinks-card');
         }
     });
 

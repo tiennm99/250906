@@ -9,9 +9,7 @@
     <link rel="icon" href="images/sweet-heart.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Dark mode initialization -->
     <script>
@@ -316,25 +314,25 @@
                 <div class="sakura-divider"></div>
                 <p class="question">What would you like to watch?</p>
                 <div class="location-options">
-                    <button class="tile-btn" data-movie="action">
-                        <img src="images/places/cinema.jpg" alt="Action Movies">
-                        <span class="tile-label">Action</span>
+                    <button class="tile-btn" data-movie="muado">
+                        <img src="images/cinema/Mua do.jpg" alt="Mưa đỏ">
+                        <span class="tile-label">Mưa đỏ</span>
                     </button>
-                    <button class="tile-btn" data-movie="romance">
-                        <img src="images/places/cinema.jpg" alt="Romance Movies">
-                        <span class="tile-label">Romance</span>
+                    <button class="tile-btn" data-movie="shin">
+                        <img src="images/cinema/Shin-Cau be but chi.jpg" alt="Shin-Cậu bé bút chì">
+                        <span class="tile-label">Shin-Cậu bé bút chì</span>
                     </button>
-                    <button class="tile-btn" data-movie="comedy">
-                        <img src="images/places/cinema.jpg" alt="Comedy Movies">
-                        <span class="tile-label">Comedy</span>
+                    <button class="tile-btn" data-movie="thanhguomdietquy">
+                        <img src="images/cinema/Thanh guom diet quy.jpg" alt="Thanh gươm diệt quỷ">
+                        <span class="tile-label">Thanh gươm diệt quỷ</span>
                     </button>
-                    <button class="tile-btn" data-movie="horror">
-                        <img src="images/places/cinema.jpg" alt="Horror Movies">
-                        <span class="tile-label">Horror</span>
+                    <button class="tile-btn" data-movie="bangdangquaikiet2">
+                        <img src="images/cinema/Bang dang quai kiet 2.jpg" alt="Băng đảng quái kiệt 2">
+                        <span class="tile-label">Băng đảng quái kiệt 2</span>
                     </button>
                     <button class="custom-btn" data-movie="custom">
                         <span class="custom-icon">🎬</span>
-                        <span><strong>Other Genre</strong></span>
+                        <span><strong>Others</strong></span>
                     </button>
                 </div>
                 <div class="selected-location-message hidden" id="selected-movie-message">
@@ -353,19 +351,11 @@
                 <p class="question">What would you like to do?</p>
                 <div class="location-options">
                     <button class="tile-btn" data-activity="walk">
-                        <img src="images/places/park.jpg" alt="Walking">
+                        <img src="images/park/walking.jpg" alt="Walking">
                         <span class="tile-label">Walking</span>
                     </button>
-                    <button class="tile-btn" data-activity="picnic">
-                        <img src="images/places/park.jpg" alt="Picnic">
-                        <span class="tile-label">Picnic</span>
-                    </button>
-                    <button class="tile-btn" data-activity="cycling">
-                        <img src="images/places/park.jpg" alt="Cycling">
-                        <span class="tile-label">Cycling</span>
-                    </button>
                     <button class="tile-btn" data-activity="photography">
-                        <img src="images/places/park.jpg" alt="Photography">
+                        <img src="images/park/photography.jpg" alt="Photography">
                         <span class="tile-label">Photography</span>
                     </button>
                     <button class="custom-btn" data-activity="custom">
@@ -451,6 +441,9 @@
                 <div class="note-container">
                     <textarea id="custom-plan-textarea" placeholder="Share your ideas here... (max 200 words)" maxlength="1500"></textarea>
                     <div class="word-counter">0/200 words</div>
+                </div>
+                <div class="selected-location-message hidden" id="selected-custom-message">
+                    <p class="message">Great plan! ✨</p>
                 </div>
                 <div class="note-actions">
                     <button id="save-plan-btn" class="btn yes-btn">Continue ♥</button>
@@ -584,6 +577,7 @@
         <source src="music/Sugar.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- Main Application Script -->
     <script src="script.js"></script>
 </body>
 </html>

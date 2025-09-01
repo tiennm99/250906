@@ -1457,7 +1457,8 @@ body:hover .scrollbar-decoration {
     margin: 20px 0;
 }
 
-#note-textarea {
+#note-textarea,
+#custom-plan-textarea {
     width: 100%;
     min-height: 150px;
     padding: 15px;
@@ -1471,13 +1472,15 @@ body:hover .scrollbar-decoration {
     transition: all 0.3s ease;
 }
 
-.dark-mode #note-textarea {
+.dark-mode #note-textarea,
+.dark-mode #custom-plan-textarea {
     background: #1e1e1e;
     border-color: rgba(255, 107, 149, 0.3);
     color: #e6e6e6;
 }
 
-#note-textarea:focus {
+#note-textarea:focus,
+#custom-plan-textarea:focus {
     border-color: rgba(255, 107, 149, 0.8);
     outline: none;
     box-shadow: 0 4px 10px rgba(255, 107, 149, 0.2);
