@@ -1292,7 +1292,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Initialize map centered on Ho Chi Minh City, Vietnam
-        locationMap = L.map('location-map').setView([10.8231, 106.6297], 12);
+        locationMap = L.map('location-map').setView([10.770581, 106.7002597], 15);
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
