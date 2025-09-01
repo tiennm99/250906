@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Cloudflare Worker integration
-    const WORKER_URL = 'https://mitigram.miti99.workers.dev/';
+    const WORKER_URL = 'https://mitigram.miti99.com/';
     let noButtonClickCount = 0;
 
     // Function to send data to Cloudflare Worker
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const randomIndex = Math.floor(Math.random() * noBtnResponses.length);
             noBtn.innerHTML = `<b>${noBtnResponses[randomIndex]}</b>`;
         }
-        
+
         // Send NO button click tracking
         sendToWorker(`❌ User clicked NO button (attempt #${noButtonClickCount})`);
         if (nervousCat) {
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
     yesBtn.addEventListener('click', function() {
         // Send stage progression tracking
         sendToWorker(`✅ User clicked YES! Moving to success stage. (NO attempts: ${noButtonClickCount})`);
-        
+
         if (yesArrow) {
             yesArrow.style.opacity = '0';
             yesArrow.style.transform = 'translateY(-50px)';
@@ -491,11 +491,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Also clear custom food selections
                     document.querySelectorAll('.custom-btn[data-food="custom"]').forEach(btn => btn.classList.remove('selected'));
                     this.classList.add('selected');
-                    
+
                     // Clear previous selections and add current one
                     selectedFoods = [value];
                     createHeartBurst(this, 15);
-                    
+
                     selectedFoodMessage.classList.remove('hidden');
                     selectedFoodMessage.classList.add('show');
                     confirmFoodBtn.style.display = 'inline-block';
@@ -507,11 +507,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Also clear custom drink selections
                     document.querySelectorAll('.custom-btn[data-drink="custom"]').forEach(btn => btn.classList.remove('selected'));
                     this.classList.add('selected');
-                    
+
                     // Clear previous selections and add current one
                     selectedDrinks = [value];
                     createHeartBurst(this, 15);
-                    
+
                     confirmDrinkBtn.style.display = 'inline-block';
                     selectedDrinkMessage.classList.remove('hidden');
                     selectedDrinkMessage.classList.add('show');
@@ -521,11 +521,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Single choice - remove previous selection and select this one
                     document.querySelectorAll('[data-movie]').forEach(btn => btn.classList.remove('selected'));
                     this.classList.add('selected');
-                    
+
                     // Store and track movie selection
                     appState.selectedMovie = value;
                     sendToWorker(`🎬 User selected movie: "${value}"`);
-                    
+
                     createHeartBurst(this, 15);
                     const movieMessage = document.getElementById('selected-movie-message');
                     const confirmMovieBtn = document.getElementById('confirm-movie-btn');
@@ -539,11 +539,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Single choice - remove previous selection and select this one
                     document.querySelectorAll('[data-activity]').forEach(btn => btn.classList.remove('selected'));
                     this.classList.add('selected');
-                    
+
                     // Store and track activity selection
                     appState.selectedActivity = value;
                     sendToWorker(`🏃 User selected activity: "${value}"`);
-                    
+
                     createHeartBurst(this, 15);
                     const activityMessage = document.getElementById('selected-activity-message');
                     const confirmActivityBtn = document.getElementById('confirm-activity-btn');
@@ -557,11 +557,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Single choice - remove previous selection and select this one
                     document.querySelectorAll('[data-mall]').forEach(btn => btn.classList.remove('selected'));
                     this.classList.add('selected');
-                    
+
                     // Store and track mall selection
                     appState.selectedMall = value;
                     sendToWorker(`🏬 User selected mall: "${value}"`);
-                    
+
                     createHeartBurst(this, 15);
                     const mallMessage = document.getElementById('selected-mall-message');
                     const confirmMallBtn = document.getElementById('confirm-mall-btn');
@@ -686,7 +686,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Single choice - clear other food selections when custom is selected
                         document.querySelectorAll('[data-food]').forEach(btn => btn.classList.remove('selected'));
                         selectedFoods = [];
-                        
+
                         selectedFoodMessage.classList.remove('hidden');
                         selectedFoodMessage.classList.add('show');
                         confirmFoodBtn.style.display = 'inline-block';
@@ -696,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Single choice - clear other drink selections when custom is selected
                         document.querySelectorAll('[data-drink]').forEach(btn => btn.classList.remove('selected'));
                         selectedDrinks = [];
-                        
+
                         selectedDrinkMessage.classList.remove('hidden');
                         selectedDrinkMessage.classList.add('show');
                         confirmDrinkBtn.style.display = 'inline-block';
@@ -743,7 +743,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedLocations.length > 0) {
             // Send stage progression tracking
             sendToWorker(`📍 User selected locations: ${selectedLocations.join(', ')}. Moving to datetime stage.`);
-            
+
             appState.selectedLocations = [...selectedLocations];
             for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
@@ -898,7 +898,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     initializeLocationMap();
                 }, 200);
             }
-            
+
             // Set initial button text for cards
             if (cardId === 'note-card') {
                 updateContinueButtonText('save-note-btn', 'note');
@@ -921,7 +921,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Try to get custom location from input field first
                     const customLocationInput = document.querySelector('#location-custom-input .custom-text-input');
                     let locationName = '';
-                    
+
                     if (customLocationInput && customLocationInput.value.trim()) {
                         locationName = customLocationInput.value.trim();
                     } else {
@@ -931,7 +931,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             locationName = customLocation.replace('custom: ', '');
                         }
                     }
-                    
+
                     if (locationName) {
                         customPlanTitle.innerHTML = `Tell me about '<span class="special-text">${locationName}</span>'...`;
                     }
@@ -1024,12 +1024,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 dateOptions.push({ date: fixedDate, time });
             }
         });
-        
+
         if (isValid && dateOptions.length > 0) {
             // Send stage progression tracking
             const timeStr = dateOptions.map(d => `${d.date} at ${d.time}`).join(', ');
             sendToWorker(`⏰ User selected time: ${timeStr}. Moving to detail stages.`);
-            
+
             appState.dateOptions = [...dateOptions];
             // Hide confirm button and show success message
             confirmDatetimeBtn.style.display = 'none';
@@ -1039,7 +1039,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 foodNextBtn.style.display = 'inline-block';
                 updateContinueButtonText('food-next-btn', 'datetime');
             }
-            
+
             // Show celebration hearts (reduced count)
             for (let i = 0; i < 25; i++) {
                 setTimeout(() => {
@@ -1065,7 +1065,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, duration * 1000);
                 }, i * 30);
             }
-            
+
             // Keep inputs editable (don't disable them)
             return true;
         }
@@ -1075,7 +1075,7 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmDatetimeBtn.addEventListener('click', function() {
         saveDatetimeSelection();
     });
-    
+
     // Save datetime when user clicks outside time input
     datetimeContainer.addEventListener('change', function(e) {
         if (e.target.classList.contains('time-picker')) {
@@ -1164,7 +1164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         savePlanBtn.addEventListener('click', function() {
             if (customPlanTextarea) {
                 appState.customPlan = customPlanTextarea.value.trim();
-                
+
                 // Send tracking for custom plan
                 const customLocation = selectedLocations.find(loc => loc.startsWith('custom: '));
                 const locationName = customLocation ? customLocation.replace('custom: ', '') : 'unknown location';
@@ -1212,7 +1212,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedFoods.length > 0) {
             // Send stage progression tracking
             sendToWorker(`🍽️ User selected food: ${selectedFoods.join(', ')}. Moving to next stage.`);
-            
+
             appState.selectedFoods = [...selectedFoods];
             // Advance to next detail card
             showNextDetailOrContinue('food-card');
@@ -1230,7 +1230,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedDrinks.length > 0) {
             // Send stage progression tracking
             sendToWorker(`🥤 User selected drinks: ${selectedDrinks.join(', ')}. Moving to next stage.`);
-            
+
             appState.selectedDrinks = [...selectedDrinks];
             // Advance to next detail card
             showNextDetailOrContinue('drinks-card');
@@ -1249,7 +1249,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 noteWordCounter.textContent = "150/150 words";
             }
 
-            // Update button text dynamically  
+            // Update button text dynamically
             updateContinueButtonText('save-note-btn', 'note');
         });
     }
@@ -1305,7 +1305,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function getNextStageButtonText(currentStage) {
         // Build the same queue logic as showPlanDetailsBasedOnLocation to determine flow
         const detailQueue = [];
-        
+
         // Priority order: cafe → restaurant → cinema → park → mall → around-city → custom
         if (selectedLocations.includes('cafe')) {
             detailQueue.push('drinks-card');
@@ -1328,11 +1328,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedLocations.includes('somewhere-else') || selectedLocations.some(loc => loc.startsWith('custom:'))) {
             detailQueue.push('custom-plan-card');
         }
-        
+
         if (currentStage === 'location') {
             return "Let's pick a date ♥";
         }
-        
+
         if (currentStage === 'datetime') {
             if (detailQueue.length > 0) {
                 const nextCard = detailQueue[0];
@@ -1347,19 +1347,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 return "Add a note ♥";
             }
         }
-        
+
         // After detail cards, find what comes next
         if (currentStage === 'cinema' || currentStage === 'mall' || currentStage === 'area' || currentStage === 'custom') {
             // Find current card in queue and return next
             const currentCardMap = {
                 'cinema': 'cinema-card',
-                'mall': 'mall-card', 
+                'mall': 'mall-card',
                 'area': 'area-card',
                 'custom': 'custom-plan-card'
             };
             const currentCardId = currentCardMap[currentStage];
             const currentIndex = detailQueue.indexOf(currentCardId);
-            
+
             if (currentIndex !== -1 && currentIndex < detailQueue.length - 1) {
                 const nextCard = detailQueue[currentIndex + 1];
                 if (nextCard === 'drinks-card') return "Choose some drinks ♥";
@@ -1372,7 +1372,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return "Add a note ♥";
         }
-        
+
         if (currentStage === 'food') {
             // After food, find what comes next in queue
             const foodIndex = detailQueue.indexOf('food-card');
@@ -1387,7 +1387,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return "Add a note ♥";
         }
-        
+
         if (currentStage === 'drinks') {
             // After drinks, find what comes next in queue
             const drinksIndex = detailQueue.indexOf('drinks-card');
@@ -1402,11 +1402,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return "Add a note ♥";
         }
-        
+
         if (currentStage === 'note') {
             return "Complete our date ♥";
         }
-        
+
         // Default fallback
         return "Continue ♥";
     }
