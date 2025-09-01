@@ -837,6 +837,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (confirmDrinkBtn) {
                     confirmDrinkBtn.textContent = "Pick a drink first ♥";
                 }
+            } else if (cardId === 'custom-plan-card') {
+                // Update title to show custom location
+                const customPlanTitle = document.querySelector('#custom-plan-card h1');
+                if (customPlanTitle) {
+                    // Try to get custom location from input field first
+                    const customLocationInput = document.querySelector('#location-custom-input .custom-text-input');
+                    let locationName = '';
+                    
+                    if (customLocationInput && customLocationInput.value.trim()) {
+                        locationName = customLocationInput.value.trim();
+                    } else {
+                        // Fallback: Find custom location from selectedLocations
+                        const customLocation = selectedLocations.find(loc => loc.startsWith('custom: '));
+                        if (customLocation) {
+                            locationName = customLocation.replace('custom: ', '');
+                        }
+                    }
+                    
+                    if (locationName) {
+                        customPlanTitle.innerHTML = `Tell me about '<span class="special-text">${locationName}</span>'...`;
+                    }
+                }
             }
         }, 50);
     }
