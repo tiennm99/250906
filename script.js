@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Cloudflare Worker integration
-    const WORKER_URL = 'https://mitigram.miti99.com/';
+    const WORKER_URL = 'https://miti-telegram.miti99.workers.dev/';
     let noButtonClickCount = 0;
 
     // Function to send data to Cloudflare Worker
